@@ -4,6 +4,8 @@ package(
 
 load(":toolchain.bzl", "prometheus_toolchain")
 
+exports_files(["toolchain.bzl"])
+
 toolchain_type(name = "toolchain_type")
 
 prometheus_toolchain(

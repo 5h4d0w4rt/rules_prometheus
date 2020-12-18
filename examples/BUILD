@@ -17,7 +17,7 @@ promtool_unit_test(
 )
 
 promtool_unit_test(
-    name = "test_rules_multiple",
+    name = "test_rules_multiple_mixed",
     srcs = [
         "tests.json",
         "tests.yml",
@@ -39,7 +39,7 @@ promtool_config_test(
 )
 
 promtool_config_test(
-    name = "test_config_multiple",
+    name = "test_config_multiple_mixed",
     srcs = [
         "prometheus.json",
         "prometheus.yml",
@@ -50,10 +50,10 @@ test_suite(
     name = "all_tests",
     tests = [
         ":test_config_json",
-        ":test_config_multiple",
+        ":test_config_multiple_mixed",
         ":test_config_yml",
         ":test_rules_json",
-        ":test_rules_multiple",
+        ":test_rules_multiple_mixed",
         ":test_rules_yml",
     ],
 )
