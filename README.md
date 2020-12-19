@@ -28,4 +28,42 @@ prometheus_register_toolchains()
 ## Rules
 
 - promtool_unit_test
+```
+//examples:test_rules_yml
+load("//prometheus:prometheus.bzl", "promtool_unit_test")
+
+promtool_unit_test(
+    name = "test_rules_yml",
+    srcs = [
+        "tests.yml",
+    ],
+    rules = ["rules.yml"],
+)
+```
+
+```bash
+bazel test //examples:test_rules_yml
+
+INFO: Build completed successfully, 3 total actions
+//examples:test_rules_yml                                                PASSED in 0.1s
+
+Executed 1 out of 1 test: 1 test passes.
+```
+
 - promtool_config_test
+```
+//examples:test_config_yml
+promtool_config_test(
+    name = "test_config_yml",
+    srcs = ["prometheus.yml"],
+)
+```
+
+```bash
+bazel test //examples:test_config_yml
+
+INFO: Build completed successfully, 3 total actions
+//examples:test_config_yml                                               PASSED in 0.1s
+
+Executed 1 out of 1 test: 1 test passes.
+```
