@@ -1,8 +1,6 @@
-load("//prometheus/internal:promtool.bzl", "promtool")
+load("@io_bazel_rules_prometheus//prometheus:prometheus.bzl", "promtool")
 
 package(default_visibility = ["//visibility:public"])
-
-exports_files(["deps.bzl"])
 
 promtool(
     name = "promtool",

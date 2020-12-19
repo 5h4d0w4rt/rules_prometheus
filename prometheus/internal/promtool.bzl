@@ -1,3 +1,48 @@
+def _promtool_impl(ctx):
+    promtool_info = ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"].prometheusToolchainInfo.promtool
+    promtool_unit_test_runner_template = ctx.file._template
+    exec = ctx.actions.declare_file("%s.out.sh" % ctx.label.name)
+
+    runfiles = ctx.runfiles(
+        files = ctx.files._template,
+        transitive_files = promtool_info.tool.files,
+    )
+    ctx.actions.expand_template(
+        template = promtool_unit_test_runner_template,
+        output = exec,
+        is_executable = True,
+        substitutions = {
+            "%tool_path%": "%s" % promtool_info.tool.files_to_run.executable.short_path,
+        },
+    )
+    return [DefaultInfo(runfiles = runfiles, executable = exec)]
+
+_promtool = rule(
+    implementation = _promtool_impl,
+    attrs = {
+        "_template": attr.label(
+            default = Label("@io_bazel_rules_prometheus//prometheus/internal:promtool.manual_runner.sh.tpl"),
+            allow_single_file = True,
+        ),
+    },
+    executable = True,
+    toolchains = ["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"],
+)
+
+def promtool(name, **kwargs):
+    """emit runnable sh_binary rule that is preconfigured to be able to run locally"""
+    runner = name + "-runner"
+    _promtool(
+        name = runner,
+        tags = ["manual"],
+        **kwargs
+    )
+    native.sh_binary(
+        name = name,
+        srcs = [runner],
+        tags = ["manual"],
+    )
+
 def _promtool_unit_test_impl(ctx):
     """promtool_unit_test implementation: we spawn test runner task from template and provide required tools and actions from toolchain"""
 
