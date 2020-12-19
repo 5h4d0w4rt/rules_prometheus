@@ -60,6 +60,7 @@ promtool_config_test(
 ```
 
 ```bash
+load("//prometheus:prometheus.bzl", "promtool_config_test")
 bazel test //examples:test_config_yml
 
 INFO: Build completed successfully, 3 total actions
