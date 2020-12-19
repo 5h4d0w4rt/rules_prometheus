@@ -3,7 +3,7 @@ def _promtool_unit_test_impl(ctx):
 
     # To ensure the files needed by the script are available, we put them in
     # the runfiles.
-    promtool_info = ctx.toolchains["@io_bazel_rules_prometheus//prometheus/toolchain:toolchain_type"].prometheusToolchainInfo.promtool
+    promtool_info = ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"].prometheusToolchainInfo.promtool
     promtool_unit_test_runner_template = promtool_info.template.files.to_list()[0]
 
     runfiles = ctx.runfiles(
@@ -33,7 +33,7 @@ promtool_unit_test = rule(
         "srcs": attr.label_list(mandatory = True, allow_files = True, cfg = "target"),
         "rules": attr.label_list(mandatory = True, allow_files = True),
     },
-    toolchains = ["@io_bazel_rules_prometheus//prometheus/toolchain:toolchain_type"],
+    toolchains = ["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"],
 )
 
 def _promtool_config_test_impl(ctx):
@@ -42,7 +42,7 @@ def _promtool_config_test_impl(ctx):
     # To ensure the files needed by the script are available, we put them in
     # the runfiles.
 
-    promtool_info = ctx.toolchains["@io_bazel_rules_prometheus//prometheus/toolchain:toolchain_type"].prometheusToolchainInfo.promtool
+    promtool_info = ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"].prometheusToolchainInfo.promtool
     promtool_unit_test_runner_template = promtool_info.template.files.to_list()[0]
 
     runfiles = ctx.runfiles(
@@ -71,5 +71,5 @@ promtool_config_test = rule(
         "_action": attr.string(default = "check config"),
         "srcs": attr.label_list(mandatory = True, allow_files = True),
     },
-    toolchains = ["@io_bazel_rules_prometheus//prometheus/toolchain:toolchain_type"],
+    toolchains = ["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"],
 )

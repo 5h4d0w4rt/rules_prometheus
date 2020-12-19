@@ -1,4 +1,4 @@
-load("//prometheus/internal:providers.bzl", "PrometheusInfo", "PromtoolInfo")
+load(":providers.bzl", "PrometheusInfo", "PromtoolInfo")
 
 PrometheusToolchainInfo = provider(fields = [
     "name",
@@ -52,9 +52,9 @@ def declare_toolchains():
             "@platforms//os:osx",
             "@platforms//cpu:x86_64",
         ],
-        toolchain = "@io_bazel_rules_prometheus//prometheus/toolchain:prometheus_darwin",
-        toolchain_type = "@io_bazel_rules_prometheus//prometheus/toolchain:toolchain_type",
+        toolchain = "@io_bazel_rules_prometheus//prometheus/internal:prometheus_darwin",
+        toolchain_type = "@io_bazel_rules_prometheus//prometheus/internal:toolchain_type",
     )
 
 def prometheus_register_toolchains():
-    native.register_toolchains("@io_bazel_rules_prometheus//prometheus/toolchain:all")
+    native.register_toolchains("@io_bazel_rules_prometheus//prometheus/internal:prometheus_toolchain_darwin")
