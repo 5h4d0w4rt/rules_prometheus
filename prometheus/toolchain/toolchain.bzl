@@ -34,3 +34,27 @@ prometheus_toolchain = rule(
     },
     provides = [platform_common.ToolchainInfo],
 )
+
+def declare_toolchains():
+    prometheus_toolchain(
+        name = "prometheus_darwin",
+        prometheus = "@prometheus_darwin//:prometheus",
+        promtool = "@prometheus_darwin//:promtool",
+        promtool_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:promtool.sh.tpl",
+    )
+    native.toolchain(
+        name = "prometheus_toolchain_darwin",
+        exec_compatible_with = [
+            "@platforms//os:osx",
+            "@platforms//cpu:x86_64",
+        ],
+        target_compatible_with = [
+            "@platforms//os:osx",
+            "@platforms//cpu:x86_64",
+        ],
+        toolchain = "@io_bazel_rules_prometheus//prometheus/toolchain:prometheus_darwin",
+        toolchain_type = "@io_bazel_rules_prometheus//prometheus/toolchain:toolchain_type",
+    )
+
+def prometheus_register_toolchains():
+    native.register_toolchains("@io_bazel_rules_prometheus//prometheus/toolchain:all")

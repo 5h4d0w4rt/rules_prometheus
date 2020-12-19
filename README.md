@@ -1,2 +1,1 @@
-# bazel_prometheus
-Bazel prometheus rules
+# Prometheus bazel rules

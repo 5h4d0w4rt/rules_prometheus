@@ -4,6 +4,6 @@ load(":deps.bzl", "prometheus_repositories")
 
 prometheus_repositories()
 
-register_toolchains(
-    "//prometheus/toolchain:all",
-)
+load("@io_bazel_rules_prometheus//prometheus:prometheus.bzl", "prometheus_register_toolchains")
+
+prometheus_register_toolchains()
