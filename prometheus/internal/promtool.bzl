@@ -30,7 +30,7 @@ _promtool = rule(
 )
 
 def promtool(name, **kwargs):
-    """emit runnable sh_binary rule that is preconfigured to be able to run locally"""
+    """emit runnable sh_binary rule that is preconfigured to be able to run within the local workspace directory"""
     runner = name + "-runner"
     _promtool(
         name = runner,
