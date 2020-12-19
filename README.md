@@ -47,26 +47,44 @@ Checking examples/rules.json
   SUCCESS: 2 rules found
 ```
 
-- promtool_unit_test
+- promtool_rules_test
 
 ```
 //examples:test_rules_yml
-
-load("//prometheus:prometheus.bzl", "promtool_unit_test")
-promtool_unit_test(
+promtool_rules_test(
     name = "test_rules_yml",
-    srcs = [
-        "tests.yml",
-    ],
-    rules = ["rules.yml"],
+    srcs = ["rules.yml"],
 )
 ```
 
 ```bash
 bazel test //examples:test_rules_yml
 
+//examples:unit_test_rules_yml                                           PASSED in 0.3s
+```
+
+- promtool_unit_test
+
+```
+
+//examples:unit_test_rules_yml
+
+load("//prometheus:prometheus.bzl", "promtool_unit_test")
+promtool_unit_test(
+name = "unit_test_rules_yml",
+srcs = [
+"tests.yml",
+],
+rules = ["rules.yml"],
+)
+
+```
+
+```bash
+bazel test //examples:unit_test_rules_yml
+
 INFO: Build completed successfully, 3 total actions
-//examples:test_rules_yml                                                PASSED in 0.1s
+//examples:unit_test_rules_yml                                                PASSED in 0.1s
 
 Executed 1 out of 1 test: 1 test passes.
 ```
