@@ -1,4 +1,4 @@
-load("//prometheus/internal:promtool.bzl", "promtool")
+load("//prometheus:prometheus.bzl", "promtool")
 
 package(default_visibility = ["//visibility:public"])
 

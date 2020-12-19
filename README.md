@@ -1,10 +1,11 @@
 # Prometheus bazel rules
 
 # Setup
+
 You will need recent [Bazel](https://bazel.build) release, otherwise rules will download and discover dependent required tools
 
-
 ## Initial project setup
+
 ```
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
@@ -24,10 +25,30 @@ load("@io_bazel_rules_prometheus//prometheus:prometheus.bzl", "prometheus_regist
 prometheus_register_toolchains()
 ```
 
-
 ## Rules
 
+- promtool
+
+```
+//:promtool
+load("//prometheus:prometheus.bzl", "promtool")
+
+package(default_visibility = ["//visibility:public"])
+
+promtool(
+    name = "promtool",
+)
+```
+
+```bash
+bazel run //:promtool check rules examples/rules.json
+
+Checking examples/rules.json
+  SUCCESS: 2 rules found
+```
+
 - promtool_unit_test
+
 ```
 //examples:test_rules_yml
 
@@ -51,6 +72,7 @@ Executed 1 out of 1 test: 1 test passes.
 ```
 
 - promtool_config_test
+
 ```
 //examples:test_config_yml
 
