@@ -118,3 +118,16 @@ promtool_config_test = rule(
     },
     toolchains = ["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"],
 )
+
+def _promtool_rules_test_impl(ctx):
+    pass
+
+promtool_rules_test = rule(
+    implementation = _promtool_config_test_impl,
+    test = True,
+    attrs = {
+        "_action": attr.string(default = "check rules"),
+        "srcs": attr.label_list(mandatory = True, allow_files = True),
+    },
+    toolchains = ["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"],
+)
