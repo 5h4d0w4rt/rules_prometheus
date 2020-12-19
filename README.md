@@ -30,8 +30,8 @@ prometheus_register_toolchains()
 - promtool_unit_test
 ```
 //examples:test_rules_yml
-load("//prometheus:prometheus.bzl", "promtool_unit_test")
 
+load("//prometheus:prometheus.bzl", "promtool_unit_test")
 promtool_unit_test(
     name = "test_rules_yml",
     srcs = [
@@ -53,6 +53,8 @@ Executed 1 out of 1 test: 1 test passes.
 - promtool_config_test
 ```
 //examples:test_config_yml
+
+load("//prometheus:prometheus.bzl", "promtool_config_test")
 promtool_config_test(
     name = "test_config_yml",
     srcs = ["prometheus.yml"],
@@ -60,7 +62,6 @@ promtool_config_test(
 ```
 
 ```bash
-load("//prometheus:prometheus.bzl", "promtool_config_test")
 bazel test //examples:test_config_yml
 
 INFO: Build completed successfully, 3 total actions
