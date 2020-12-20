@@ -1,5 +1,18 @@
 # Prometheus bazel rules
 
+Prometheus/Alertmanager rules for Bazel
+
+# TODO
+- autodocs and improve rules documentation
+- better examples
+- integrate prometheus, alertmanager and amtool into rules and workspace binaries
+- start prometheus server/alertmanager with input configs
+- run some binary tests against prometheus server and alertmanager for smoke/integration/load testing
+- unit test rules and toolchains
+- add linux toolchain
+- make toolchains work in containers
+- create CI config so repo is scalable
+
 # Setup
 
 You will need recent [Bazel](https://bazel.build) release, otherwise rules will download and discover dependent required tools
