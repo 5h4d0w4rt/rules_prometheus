@@ -8,6 +8,7 @@ bzl_library(
     name = "prometheus",
     srcs = ["prometheus.bzl"],
     deps = [
+        "//prometheus/internal:prom",
         "//prometheus/internal:promtool",
         "//prometheus/internal:toolchain",
     ],

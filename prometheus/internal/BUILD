@@ -27,6 +27,12 @@ bzl_library(
 )
 
 bzl_library(
+    name = "prom",
+    srcs = ["prom.bzl"],
+    deps = [":toolchain"],
+)
+
+bzl_library(
     name = "providers",
     srcs = ["providers.bzl"],
 )
