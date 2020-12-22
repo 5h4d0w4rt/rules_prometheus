@@ -28,6 +28,8 @@ if [ -z "${BUILD_WORKSPACE_DIRECTORY-}" ]; then
     exit 1
 fi
 
-pushd "${BUILD_WORKSPACE_DIRECTORY}" && pwd && $TOOL_SHORT_PATH "$@" \
+cd "${BUILD_WORKSPACE_DIRECTORY}"
+
+$TOOL_SHORT_PATH \
     --config.file="$(readlink bazel-rules_prometheus)/external/prometheus_darwin/prometheus.yml" \
-    --storage.tsdb.path="$(readlink bazel-rules_prometheus)/data/" && popd
+    --storage.tsdb.path="$(readlink bazel-rules_prometheus)/data/" "$@"
