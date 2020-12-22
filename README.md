@@ -5,7 +5,7 @@ Prometheus/Alertmanager rules for Bazel
 # TODO
 - autodocs and improve rules documentation
 - better examples
-- integrate prometheus, alertmanager and amtool into rules and workspace binaries
+- integrate alertmanager and amtool into rules and workspace binaries
 - start prometheus server/alertmanager with input configs
 - run some binary tests against prometheus server and alertmanager for smoke/integration/load testing
 - unit test rules and toolchains
