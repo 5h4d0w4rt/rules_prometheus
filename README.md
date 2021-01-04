@@ -2,6 +2,16 @@
 
 Prometheus/Alertmanager rules for Bazel
 
+- [Prometheus bazel rules](#prometheus-bazel-rules)
+- [TODO](#todo)
+- [Initial project setup](#initial-project-setup)
+- [Rules](#rules)
+  - [promtool_config_test](#promtool_config_test)
+  - [promtool_rules_test](#promtool_rules_test)
+  - [promtool_unit_test](#promtool_unit_test)
+  - [prometheus](#prometheus)
+  - [promtool](#promtool)
+
 # TODO
 - improve rules documentation
 - better examples or point to examples directory
@@ -13,11 +23,8 @@ Prometheus/Alertmanager rules for Bazel
 - make toolchains work in containers
 - create CI config so repo is scalable
 
-# Setup
-
+# Initial project setup
 You will need recent [Bazel](https://bazel.build) release, otherwise rules will download and discover dependent required tools
-
-## Initial project setup
 
 ```
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
@@ -38,7 +45,7 @@ load("@io_bazel_rules_prometheus//prometheus:prometheus.bzl", "prometheus_regist
 prometheus_register_toolchains()
 ```
 
-## Rules
+# Rules
 
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
