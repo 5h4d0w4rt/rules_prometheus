@@ -19,6 +19,7 @@ def _prometheus_impl(ctx):
 
 _prometheus = rule(
     implementation = _prometheus_impl,
+    doc = """Private rule implemented for invocation in public prometheus() runner""",
     attrs = {
         "_template": attr.label(
             default = Label("@io_bazel_rules_prometheus//prometheus/internal:prom.manual_runner.sh.tpl"),
@@ -30,8 +31,10 @@ _prometheus = rule(
 )
 
 def prometheus(name, **kwargs):
-    """
-    Prometheus runner which will launch prometheus server
+    """Prometheus runner which will launch prometheus server
+
+    This will emit runnable sh_binary target which will invoke prometheus server with all arguments passed along.
+    Tool will have access to workspace. It is intended for convenient in-workspace usage by human and not to be invoked programmatically.
 
     Example:
     ```
@@ -43,6 +46,11 @@ def prometheus(name, **kwargs):
         name = "prometheus",
     )
     ```
+
+    Args:
+      name: A unique name for this target.
+      **kwargs: Attributes to be passed along
+
     """
     runner = name + "-runner"
     _prometheus(

@@ -1,8 +1,7 @@
-# Prometheus bazel rules
+<h1>Prometheus bazel rules
 
 Prometheus/Alertmanager rules for Bazel
 
-- [Prometheus bazel rules](#prometheus-bazel-rules)
 - [Initial project setup](#initial-project-setup)
 - [Rules](#rules)
   - [promtool_config_test](#promtool_config_test)
@@ -173,7 +172,10 @@ bazel test //examples:unit_test_rules_yml
 prometheus(<a href="#prometheus-name">name</a>, <a href="#prometheus-kwargs">kwargs</a>)
 </pre>
 
-    Prometheus runner which will launch prometheus server
+Prometheus runner which will launch prometheus server
+
+This will emit runnable sh_binary target which will invoke prometheus server with all arguments passed along.
+Tool will have access to workspace. It is intended for convenient in-workspace usage by human and not to be invoked programmatically.
 
 Example:
 ```
@@ -186,13 +188,14 @@ prometheus(
 )
 ```
 
+
 **PARAMETERS**
 
 
 | Name  | Description | Default Value |
 | :-------------: | :-------------: | :-------------: |
-| name |  <p align="center"> - </p>   |  none |
-| kwargs |  <p align="center"> - </p>   |  none |
+| name |  A unique name for this target.   |  none |
+| kwargs |  Attributes to be passed along   |  none |
 
 
 <a name="#promtool"></a>
@@ -203,7 +206,10 @@ prometheus(
 promtool(<a href="#promtool-name">name</a>, <a href="#promtool-kwargs">kwargs</a>)
 </pre>
 
-    Promtool runner which will launch promtool
+Promtool runner which will launch promtool
+
+This rule will emit runnable sh_binary target which will invoke promtool binary and all passed arguments along.
+    Tool will have access to workspace. It is intended for convenient in-workspace usage by human and not to be invoked programmatically.
 
 Example:
 ```
@@ -217,10 +223,11 @@ promtool(
 )
 ```
 
+
 **PARAMETERS**
 
 
 | Name  | Description | Default Value |
 | :-------------: | :-------------: | :-------------: |
-| name |  <p align="center"> - </p>   |  none |
-| kwargs |  <p align="center"> - </p>   |  none |
+| name |  A unique name for this target.   |  none |
+| kwargs |  Attributes to be passed along   |  none |

@@ -1,5 +1,6 @@
 workspace(name = "io_bazel_rules_prometheus")
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load(":deps.bzl", "prometheus_repositories")
 
 prometheus_repositories()
@@ -7,8 +8,6 @@ prometheus_repositories()
 load("@io_bazel_rules_prometheus//prometheus:prometheus.bzl", "prometheus_register_toolchains")
 
 prometheus_register_toolchains()
-
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "bazel_skylib",

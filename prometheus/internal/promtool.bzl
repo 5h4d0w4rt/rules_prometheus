@@ -19,7 +19,7 @@ def _promtool_impl(ctx):
 
 _promtool = rule(
     implementation = _promtool_impl,
-    doc = """Private rule implemented to invoke in public promtool() runner""",
+    doc = """Private rule implemented for invocation in public promtool() runner""",
     attrs = {
         "_template": attr.label(
             default = Label("@io_bazel_rules_prometheus//prometheus/internal:promtool.manual_runner.sh.tpl"),
@@ -31,8 +31,10 @@ _promtool = rule(
 )
 
 def promtool(name, **kwargs):
-    """
-    Promtool runner which will launch promtool
+    """Promtool runner which will launch promtool
+
+    This rule will emit runnable sh_binary target which will invoke promtool binary and all passed arguments along.
+        Tool will have access to workspace. It is intended for convenient in-workspace usage by human and not to be invoked programmatically.
 
     Example:
     ```
@@ -45,6 +47,10 @@ def promtool(name, **kwargs):
         name = "promtool",
     )
     ```
+
+    Args:
+      name: A unique name for this target.
+      **kwargs: Attributes to be passed along
     """
     runner = name + "-runner"
     _promtool(
