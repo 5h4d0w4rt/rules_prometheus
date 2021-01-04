@@ -28,6 +28,6 @@ load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
 
 stardoc_repositories()
 
-load("@io_bazel_rules_prometheus//prometheus:defs.bzl", "prometheus_repositories")
+load("@io_bazel_rules_prometheus//:deps.bzl", "prometheus_repositories")
 
 prometheus_repositories()

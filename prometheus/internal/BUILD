@@ -7,12 +7,18 @@ package(
     ],
 )
 
+exports_files(
+    [
+        "repositories.bzl",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 exports_files([
     "promtool.bzl",
     "prom.bzl",
     "providers.bzl",
     "toolchain.bzl",
-    "repositories.bzl",
 ])
 
 exports_files(

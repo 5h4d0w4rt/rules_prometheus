@@ -16,8 +16,6 @@ exports_files([
 """
 
 def prometheus_repositories(prometheus_version = "2.23.0", alertmanager_version = "0.21.0"):
-    """define prometheus repositories and download dependencies"""
-
     prometheus_darwin_arch = "darwin-amd64"
     prometheus_darwin_url = "https://github.com/prometheus/prometheus/releases/download/v{version}/prometheus-{version}.{darwin_arch}.tar.gz".format(
         version = prometheus_version,
