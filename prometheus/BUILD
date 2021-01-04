@@ -3,11 +3,11 @@ load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
 
 package(default_visibility = ["//visibility:public"])
 
-exports_files(["prometheus.bzl"])
+exports_files(["defs.bzl"])
 
 bzl_library(
-    name = "prometheus",
-    srcs = ["prometheus.bzl"],
+    name = "defs",
+    srcs = ["defs.bzl"],
     deps = [
         "//prometheus/internal:prom",
         "//prometheus/internal:promtool",
@@ -19,7 +19,7 @@ bzl_library(
 stardoc(
     name = "docs",
     out = "docs.md",
-    input = "prometheus.bzl",
+    input = "defs.bzl",
     symbol_names = [
         "promtool",
         "promtool_config_test",
@@ -28,6 +28,6 @@ stardoc(
         "prometheus",
     ],
     deps = [
-        ":prometheus",
+        ":defs",
     ],
 )

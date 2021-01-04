@@ -62,7 +62,7 @@ Example:
 ```
 //examples:test_config_yml
 
-load("//prometheus:prometheus.bzl", "promtool_config_test")
+load("//prometheus:defs.bzl", "promtool_config_test")
 promtool_config_test(
     name = "test_config_yml",
     srcs = ["prometheus.yml"],
@@ -136,7 +136,7 @@ Example:
 ```
 //examples:unit_test_rules_yml
 
-load("//prometheus:prometheus.bzl", "promtool_unit_test")
+load("//prometheus:defs.bzl", "promtool_unit_test")
 promtool_unit_test(
 name = "unit_test_rules_yml",
 srcs = [
@@ -179,7 +179,7 @@ Tool will have access to workspace. It is intended for convenient in-workspace u
 
 Example:
 ```
-load("//prometheus:prometheus.bzl", "prometheus")
+load("//prometheus:defs.bzl", "prometheus")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -214,7 +214,7 @@ This rule will emit runnable sh_binary target which will invoke promtool binary 
 Example:
 ```
 //:promtool
-load("//prometheus:prometheus.bzl", "promtool")
+load("//prometheus:defs.bzl", "promtool")
 
 package(default_visibility = ["//visibility:public"])
 

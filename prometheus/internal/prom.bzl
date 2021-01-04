@@ -38,7 +38,7 @@ def prometheus(name, **kwargs):
 
     Example:
     ```
-    load("//prometheus:prometheus.bzl", "prometheus")
+    load("//prometheus:defs.bzl", "prometheus")
 
     package(default_visibility = ["//visibility:public"])
 

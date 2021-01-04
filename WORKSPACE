@@ -5,7 +5,7 @@ load(":deps.bzl", "prometheus_repositories")
 
 prometheus_repositories()
 
-load("@io_bazel_rules_prometheus//prometheus:prometheus.bzl", "prometheus_register_toolchains")
+load("@io_bazel_rules_prometheus//prometheus:defs.bzl", "prometheus_register_toolchains")
 
 prometheus_register_toolchains()
 
