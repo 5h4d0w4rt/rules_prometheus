@@ -3,7 +3,6 @@
 Prometheus/Alertmanager rules for Bazel
 
 - [Prometheus bazel rules](#prometheus-bazel-rules)
-- [TODO](#todo)
 - [Initial project setup](#initial-project-setup)
 - [Rules](#rules)
   - [promtool_config_test](#promtool_config_test)
@@ -12,7 +11,7 @@ Prometheus/Alertmanager rules for Bazel
   - [prometheus](#prometheus)
   - [promtool](#promtool)
 
-# TODO
+TODO
 - improve rules documentation
 - better examples or point to examples directory
 - integrate alertmanager and amtool into rules and workspace binaries
