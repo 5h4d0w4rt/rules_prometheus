@@ -1,4 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load(":toolchain.bzl", "prometheus_register_toolchains")
 
 ALERTMANAGER_BUILD_FILE_CONTENTS = """
 exports_files([
@@ -15,6 +16,8 @@ exports_files([
 """
 
 def prometheus_repositories(prometheus_version = "2.23.0", alertmanager_version = "0.21.0"):
+    """define prometheus repositories and download dependencies"""
+
     prometheus_darwin_arch = "darwin-amd64"
     prometheus_darwin_url = "https://github.com/prometheus/prometheus/releases/download/v{version}/prometheus-{version}.{darwin_arch}.tar.gz".format(
         version = prometheus_version,
@@ -37,3 +40,5 @@ def prometheus_repositories(prometheus_version = "2.23.0", alertmanager_version 
         strip_prefix = "alertmanager-{}.{}".format(alertmanager_version, prometheus_darwin_arch),
         build_file_content = ALERTMANAGER_BUILD_FILE_CONTENTS,
     )
+
+    prometheus_register_toolchains()

@@ -12,6 +12,7 @@ bzl_library(
         "//prometheus/internal:prom",
         "//prometheus/internal:promtool",
         "//prometheus/internal:providers",
+        "//prometheus/internal:repositories",
         "//prometheus/internal:toolchain",
     ],
 )

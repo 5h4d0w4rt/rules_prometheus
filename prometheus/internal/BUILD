@@ -12,6 +12,7 @@ exports_files([
     "prom.bzl",
     "providers.bzl",
     "toolchain.bzl",
+    "repositories.bzl",
 ])
 
 exports_files(
@@ -44,6 +45,12 @@ bzl_library(
     name = "toolchain",
     srcs = ["toolchain.bzl"],
     deps = [":providers"],
+)
+
+bzl_library(
+    name = "repositories",
+    srcs = ["repositories.bzl"],
+    deps = [":toolchain"],
 )
 
 toolchain_type(

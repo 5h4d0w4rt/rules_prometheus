@@ -1,12 +1,13 @@
 load(":providers.bzl", "PrometheusInfo", "PromtoolInfo")
 
-PrometheusToolchainInfo = provider(fields = [
-    "name",
-    "prometheus",
-    "promtool",
-])
-
-# genrule to work with real machine instead of sandboxed bazel environment?
+PrometheusToolchainInfo = provider(
+    doc = "Prometheus Toolchain metadata",
+    fields = [
+        "name",
+        "prometheus",
+        "promtool",
+    ],
+)
 
 def _prometheus_toolchain_impl(ctx):
     toolchain_info = platform_common.ToolchainInfo(
