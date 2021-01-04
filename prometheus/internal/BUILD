@@ -10,7 +10,11 @@ package(
 exports_files(
     [
         "repositories.bzl",
-    ],
+    ] + glob([
+        "*.bat",
+        "*.sh",
+        "*.sh.tpl",
+    ]),
     visibility = ["//visibility:public"],
 )
 
@@ -20,15 +24,6 @@ exports_files([
     "providers.bzl",
     "toolchain.bzl",
 ])
-
-exports_files(
-    glob([
-        "*.bat",
-        "*.sh",
-        "*.sh.tpl",
-    ]),
-    visibility = ["//visibility:public"],
-)
 
 bzl_library(
     name = "promtool",

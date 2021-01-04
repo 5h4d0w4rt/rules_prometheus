@@ -1,4 +1,4 @@
-<h1>Prometheus bazel rules
+<h1>Prometheus bazel rules</h1>
 
 Prometheus/Alertmanager rules for Bazel
 
@@ -9,9 +9,9 @@ Prometheus/Alertmanager rules for Bazel
   - [promtool_unit_test](#promtool_unit_test)
   - [prometheus](#prometheus)
   - [promtool](#promtool)
+- [Examples](#examples)
 
 TODO
-- improve rules documentation
 - better examples or point to examples directory
 - integrate alertmanager and amtool into rules and workspace binaries
 - start prometheus server/alertmanager with input configs
@@ -231,3 +231,5 @@ promtool(
 | :-------------: | :-------------: | :-------------: |
 | name |  A unique name for this target.   |  none |
 | kwargs |  Attributes to be passed along   |  none |
+
+# Examples
