@@ -2,11 +2,14 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load(":toolchain.bzl", "declare_toolchains")
 
 package(
-    default_visibility = ["//prometheus:__subpackages__"],
+    default_visibility = [
+        "//prometheus:__subpackages__",
+    ],
 )
 
 exports_files([
     "promtool.bzl",
+    "prom.bzl",
     "providers.bzl",
     "toolchain.bzl",
 ])
@@ -40,6 +43,7 @@ bzl_library(
 bzl_library(
     name = "toolchain",
     srcs = ["toolchain.bzl"],
+    deps = [":providers"],
 )
 
 toolchain_type(

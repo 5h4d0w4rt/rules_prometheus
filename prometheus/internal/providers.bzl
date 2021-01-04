@@ -1,8 +1,14 @@
-PromtoolInfo = provider(fields = {
-    "tool": "Promtool label",
-    "template": "Template script that will be filled with execution details",
-})
+PromtoolInfo = provider(
+    doc = "Promtool metadata provider",
+    fields = {
+        "tool": "Promtool label",
+        "template": "Template script that will be filled with execution details",
+    },
+)
 
-PrometheusInfo = provider(fields = {
-    "tool": "Prometheus label",
-})
+PrometheusInfo = provider(
+    doc = "Prometheus server metadata provider",
+    fields = {
+        "tool": "Prometheus label",
+    },
+)

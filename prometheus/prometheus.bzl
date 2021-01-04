@@ -6,7 +6,7 @@ load(
     _promtool_unit_test = "promtool_unit_test",
 )
 load(
-    "@io_bazel_rules_prometheus//prometheus/internal:toolchain.bzl",
+    "//prometheus/internal:toolchain.bzl",
     _prometheus_register_toolchains = "prometheus_register_toolchains",
 )
 load(

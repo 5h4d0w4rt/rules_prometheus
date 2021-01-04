@@ -3,8 +3,8 @@
 Prometheus/Alertmanager rules for Bazel
 
 # TODO
-- autodocs and improve rules documentation
-- better examples
+- improve rules documentation
+- better examples or point to examples directory
 - integrate alertmanager and amtool into rules and workspace binaries
 - start prometheus server/alertmanager with input configs
 - run some binary tests against prometheus server and alertmanager for smoke/integration/load testing
@@ -40,28 +40,58 @@ prometheus_register_toolchains()
 
 ## Rules
 
-- promtool
+<!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
+<a name="#promtool_config_test"></a>
+
+## promtool_config_test
+
+<pre>
+promtool_config_test(<a href="#promtool_config_test-name">name</a>, <a href="#promtool_config_test-srcs">srcs</a>)
+</pre>
+
+
+Run "promtool check config" against config targets
+
+Example:
 ```
-//:promtool
-load("//prometheus:prometheus.bzl", "promtool")
+//examples:test_config_yml
 
-package(default_visibility = ["//visibility:public"])
-
-promtool(
-    name = "promtool",
+load("//prometheus:prometheus.bzl", "promtool_config_test")
+promtool_config_test(
+    name = "test_config_yml",
+    srcs = ["prometheus.yml"],
 )
 ```
 
 ```bash
-bazel run //:promtool check rules examples/rules.json
+bazel test //examples:test_config_yml
 
-Checking examples/rules.json
-  SUCCESS: 2 rules found
+//examples:test_config_yml                                      (cached) PASSED in 0.1s
 ```
 
-- promtool_rules_test
 
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
+| name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
+| srcs |  List of prometheus configuration targets   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | required |  |
+
+
+<a name="#promtool_rules_test"></a>
+
+## promtool_rules_test
+
+<pre>
+promtool_rules_test(<a href="#promtool_rules_test-name">name</a>, <a href="#promtool_rules_test-srcs">srcs</a>)
+</pre>
+
+
+Run "promtool check rules" against rules targets
+
+Example:
 ```
 //examples:test_rules_yml
 promtool_rules_test(
@@ -76,10 +106,29 @@ bazel test //examples:test_rules_yml
 //examples:unit_test_rules_yml                                           PASSED in 0.3s
 ```
 
-- promtool_unit_test
 
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
+| name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
+| srcs |  List of Prometheus rules file targets   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | required |  |
+
+
+<a name="#promtool_unit_test"></a>
+
+## promtool_unit_test
+
+<pre>
+promtool_unit_test(<a href="#promtool_unit_test-name">name</a>, <a href="#promtool_unit_test-rules">rules</a>, <a href="#promtool_unit_test-srcs">srcs</a>)
+</pre>
+
+
+Run "promtool test rules" against test targets and rules files
+
+Example:
 ```
-
 //examples:unit_test_rules_yml
 
 load("//prometheus:prometheus.bzl", "promtool_unit_test")
@@ -90,35 +139,82 @@ srcs = [
 ],
 rules = ["rules.yml"],
 )
-
 ```
 
 ```bash
 bazel test //examples:unit_test_rules_yml
 
-INFO: Build completed successfully, 3 total actions
 //examples:unit_test_rules_yml                                                PASSED in 0.1s
-
-Executed 1 out of 1 test: 1 test passes.
 ```
 
-- promtool_config_test
 
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
+| name |  A unique name for this target.   | <a href="https://bazel.build/docs/build-ref.html#name">Name</a> | required |  |
+| rules |  List of Rules-under-Test file targets   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | required |  |
+| srcs |  List of Prometheus Unit Test file targets   | <a href="https://bazel.build/docs/build-ref.html#labels">List of labels</a> | required |  |
+
+
+<a name="#prometheus"></a>
+
+## prometheus
+
+<pre>
+prometheus(<a href="#prometheus-name">name</a>, <a href="#prometheus-kwargs">kwargs</a>)
+</pre>
+
+    Prometheus runner which will launch prometheus server
+
+Example:
 ```
-//examples:test_config_yml
+load("//prometheus:prometheus.bzl", "prometheus")
 
-load("//prometheus:prometheus.bzl", "promtool_config_test")
-promtool_config_test(
-    name = "test_config_yml",
-    srcs = ["prometheus.yml"],
+package(default_visibility = ["//visibility:public"])
+
+prometheus(
+    name = "prometheus",
 )
 ```
 
-```bash
-bazel test //examples:test_config_yml
+**PARAMETERS**
 
-INFO: Build completed successfully, 3 total actions
-//examples:test_config_yml                                               PASSED in 0.1s
 
-Executed 1 out of 1 test: 1 test passes.
+| Name  | Description | Default Value |
+| :-------------: | :-------------: | :-------------: |
+| name |  <p align="center"> - </p>   |  none |
+| kwargs |  <p align="center"> - </p>   |  none |
+
+
+<a name="#promtool"></a>
+
+## promtool
+
+<pre>
+promtool(<a href="#promtool-name">name</a>, <a href="#promtool-kwargs">kwargs</a>)
+</pre>
+
+    Promtool runner which will launch promtool
+
+Example:
 ```
+//:promtool
+load("//prometheus:prometheus.bzl", "promtool")
+
+package(default_visibility = ["//visibility:public"])
+
+promtool(
+    name = "promtool",
+)
+```
+
+**PARAMETERS**
+
+
+| Name  | Description | Default Value |
+| :-------------: | :-------------: | :-------------: |
+| name |  <p align="center"> - </p>   |  none |
+| kwargs |  <p align="center"> - </p>   |  none |

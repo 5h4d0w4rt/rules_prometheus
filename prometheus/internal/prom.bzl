@@ -30,7 +30,20 @@ _prometheus = rule(
 )
 
 def prometheus(name, **kwargs):
-    """emit runnable sh_binary rule that is preconfigured to be able to run within the local workspace directory"""
+    """
+    Prometheus runner which will launch prometheus server
+
+    Example:
+    ```
+    load("//prometheus:prometheus.bzl", "prometheus")
+
+    package(default_visibility = ["//visibility:public"])
+
+    prometheus(
+        name = "prometheus",
+    )
+    ```
+    """
     runner = name + "-runner"
     _prometheus(
         name = runner,
