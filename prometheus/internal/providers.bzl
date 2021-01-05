@@ -10,5 +10,6 @@ PrometheusInfo = provider(
     doc = "Prometheus server metadata provider",
     fields = {
         "tool": "Prometheus label",
+        "template": "Template script that will be filled with execution details",
     },
 )

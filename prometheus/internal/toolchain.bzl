@@ -15,6 +15,7 @@ def _prometheus_toolchain_impl(ctx):
             name = ctx.label.name,
             prometheus = PrometheusInfo(
                 tool = ctx.attr.prometheus,
+                template = ctx.attr.prometheus_executor_template,
             ),
             promtool = PromtoolInfo(
                 tool = ctx.attr.promtool,
@@ -32,6 +33,7 @@ prometheus_toolchain = rule(
         "prometheus": attr.label(mandatory = True, allow_single_file = True, executable = True, cfg = "exec"),
         "promtool": attr.label(mandatory = True, allow_single_file = True, executable = True, cfg = "exec"),
         "promtool_executor_template": attr.label(mandatory = True, allow_single_file = True),
+        "prometheus_executor_template": attr.label(mandatory = True, allow_single_file = True),
     },
     provides = [platform_common.ToolchainInfo],
 )
@@ -42,6 +44,7 @@ def declare_toolchains():
         prometheus = "@prometheus_darwin//:prometheus",
         promtool = "@prometheus_darwin//:promtool",
         promtool_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:promtool.sh.tpl",
+        prometheus_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:prometheus.sh.tpl",
     )
     native.toolchain(
         name = "prometheus_toolchain_darwin",

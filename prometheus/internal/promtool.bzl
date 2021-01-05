@@ -1,5 +1,9 @@
 def _promtool_impl(ctx):
-    promtool_info = ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"].prometheusToolchainInfo.promtool
+    promtool_info = (
+        ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"]
+            .prometheusToolchainInfo
+            .promtool
+    )
     promtool_unit_test_runner_template = ctx.file._template
     exec = ctx.actions.declare_file("%s.out.sh" % ctx.label.name)
 
@@ -69,7 +73,11 @@ def _promtool_unit_test_impl(ctx):
 
     # To ensure the files needed by the script are available, we put them in
     # the runfiles.
-    promtool_info = ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"].prometheusToolchainInfo.promtool
+    promtool_info = (
+        ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"]
+            .prometheusToolchainInfo
+            .promtool
+    )
     promtool_unit_test_runner_template = promtool_info.template.files.to_list()[0]
 
     runfiles = ctx.runfiles(
@@ -141,7 +149,11 @@ def _promtool_config_test_impl(ctx):
     # To ensure the files needed by the script are available, we put them in
     # the runfiles.
 
-    promtool_info = ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"].prometheusToolchainInfo.promtool
+    promtool_info = (
+        ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"]
+            .prometheusToolchainInfo
+            .promtool
+    )
     promtool_unit_test_runner_template = promtool_info.template.files.to_list()[0]
 
     runfiles = ctx.runfiles(
@@ -198,7 +210,11 @@ bazel test //examples:test_config_yml
 )
 
 def _promtool_rules_test_impl(ctx):
-    promtool_info = ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"].prometheusToolchainInfo.promtool
+    promtool_info = (
+        ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"]
+            .prometheusToolchainInfo
+            .promtool
+    )
     promtool_unit_test_runner_template = promtool_info.template.files.to_list()[0]
 
     runfiles = ctx.runfiles(
