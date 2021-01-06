@@ -12,19 +12,24 @@ Prometheus/Alertmanager rules for Bazel
 - [Examples](#examples)
 
 TODO
-- better examples or point to examples directory
-- integrate alertmanager and amtool into rules and workspace binaries
-- start prometheus server/alertmanager with input configs
-- run some binary tests against prometheus server and alertmanager for smoke/integration/load testing
+
+- integrate alertmanager and amtool into rules and workspace binaries (todo with sergey)
+- implement local backfiller (todo with alexander)
+- start prometheus alertmanager with input configs
 - unit test rules and toolchains
 - add linux toolchain
-- make toolchains work in containers
 - create CI config so repo is scalable
+NTH
+- run some binary tests macros against prometheus server and alertmanager for smoke/integration/load testing
+?
+- make toolchains work in containers
 
 # Initial project setup
+
 You will need recent [Bazel](https://bazel.build) release, otherwise rules will download and discover dependent required tools
 
 otherwise, refer to [release page](https://github.com/5h4d0w4rt/rules_prometheus/releases/)
+
 # Rules
 
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
@@ -215,3 +220,5 @@ promtool(
 | kwargs |  Attributes to be passed along   |  none |
 
 # Examples
+
+[Here](https://github.com/5h4d0w4rt/rules_prometheus/tree/main/examples/BUILD)
