@@ -15,7 +15,7 @@ TODO
 
 - integrate alertmanager and amtool into rules and workspace binaries (todo with sergey)
 - implement local backfiller (todo with alexander)
-- start prometheus alertmanager with input configs
+- start alertmanager with input configs
 - unit test rules and toolchains
 - add linux toolchain
 - create CI config so repo is scalable

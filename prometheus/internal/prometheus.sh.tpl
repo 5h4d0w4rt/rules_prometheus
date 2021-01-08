@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-TOOL_PATH=%tool_path%
-DATA_DIRECTORY_PATH=%data_directory_path%
+TOOL_PATH="%tool_path%"
+DATA_DIRECTORY_PATH="%data_directory_path%"
 
 # apply correct permissions to the directory so prometheus server can write to it
 # questionable trick but works

@@ -1,15 +1,18 @@
-load(":providers.bzl", "PrometheusInfo", "PromtoolInfo")
+load(":providers.bzl", "AlertmanagerInfo", "AmtoolInfo", "PrometheusInfo", "PromtoolInfo")
 
 PrometheusToolchainInfo = provider(
-    doc = "Prometheus Toolchain metadata",
-    fields = [
-        "name",
-        "prometheus",
-        "promtool",
-    ],
+    doc = "Prometheus Toolchain metadata, contains prometheus, alertmanager, promtool and amtool's necessary data",
+    fields = {
+        "name": "Label name of the toolchain",
+        "prometheus": "PrometheusInfo provider",
+        "promtool": "PromtoolInfo provider",
+        "amtool": "Amtool provider",
+        "alertmanager": "Alertmanager provider",
+    },
 )
 
 def _prometheus_toolchain_impl(ctx):
+    """Toolchain main implementation function"""
     toolchain_info = platform_common.ToolchainInfo(
         prometheusToolchainInfo = PrometheusToolchainInfo(
             name = ctx.label.name,
@@ -21,14 +24,15 @@ def _prometheus_toolchain_impl(ctx):
                 tool = ctx.attr.promtool,
                 template = ctx.attr.promtool_executor_template,
             ),
+            amtool = AmtoolInfo(),
+            alertmanager = AlertmanagerInfo(),
         ),
     )
-    return [
-        toolchain_info,
-    ]
+    return [toolchain_info]
 
 prometheus_toolchain = rule(
     implementation = _prometheus_toolchain_impl,
+    doc = "Prometheus toolchain implements main instruments of this rule set",
     attrs = {
         "prometheus": attr.label(mandatory = True, allow_single_file = True, executable = True, cfg = "exec"),
         "promtool": attr.label(mandatory = True, allow_single_file = True, executable = True, cfg = "exec"),
@@ -39,6 +43,7 @@ prometheus_toolchain = rule(
 )
 
 def declare_toolchains():
+    """Create prometheus_toolchain rules for every supported platform and link toolchains to them"""
     prometheus_toolchain(
         name = "prometheus_darwin",
         prometheus = "@prometheus_darwin//:prometheus",
@@ -61,4 +66,5 @@ def declare_toolchains():
     )
 
 def prometheus_register_toolchains():
+    """Register all toolchains"""
     native.register_toolchains("@io_bazel_rules_prometheus//prometheus/internal:prometheus_toolchain_darwin")
