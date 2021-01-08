@@ -45,14 +45,14 @@ prometheus_toolchain = rule(
 def declare_toolchains():
     """Create prometheus_toolchain rules for every supported platform and link toolchains to them"""
     prometheus_toolchain(
-        name = "prometheus_darwin",
-        prometheus = "@prometheus_darwin//:prometheus",
-        promtool = "@prometheus_darwin//:promtool",
+        name = "prometheus_darwin-amd64",
+        prometheus = "@prometheus_darwin-amd64//:prometheus",
+        promtool = "@prometheus_darwin-amd64//:promtool",
         promtool_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:promtool.sh.tpl",
         prometheus_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:prometheus.sh.tpl",
     )
     native.toolchain(
-        name = "prometheus_toolchain_darwin",
+        name = "prometheus_toolchain_darwin-amd64",
         exec_compatible_with = [
             "@platforms//os:osx",
             "@platforms//cpu:x86_64",
@@ -61,10 +61,10 @@ def declare_toolchains():
             "@platforms//os:osx",
             "@platforms//cpu:x86_64",
         ],
-        toolchain = "@io_bazel_rules_prometheus//prometheus/internal:prometheus_darwin",
+        toolchain = "@io_bazel_rules_prometheus//prometheus/internal:prometheus_darwin-amd64",
         toolchain_type = "@io_bazel_rules_prometheus//prometheus/internal:toolchain_type",
     )
 
 def prometheus_register_toolchains():
     """Register all toolchains"""
-    native.register_toolchains("@io_bazel_rules_prometheus//prometheus/internal:prometheus_toolchain_darwin")
+    native.register_toolchains("@io_bazel_rules_prometheus//prometheus/internal:prometheus_toolchain_darwin-amd64")
