@@ -18,10 +18,7 @@ TODO
 - start alertmanager with input configs
 - unit test rules and toolchains
 - add linux toolchain
-- create CI config so repo is scalable
-NTH
 - run some binary tests macros against prometheus server and alertmanager for smoke/integration/load testing
-?
 - make toolchains work in containers
 
 # Initial project setup
