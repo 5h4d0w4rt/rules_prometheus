@@ -1,0 +1,25 @@
+# HELP go_gc_duration_seconds A summary of the pause duration of garbage collection cycles.
+# TYPE go_gc_duration_seconds summary
+go_gc_duration_seconds_count 1000 1610013056
+go_gc_duration_seconds_count 1000 1610013157
+go_gc_duration_seconds_count 1000 1610013258
+go_gc_duration_seconds_count 1000 1610013359
+go_gc_duration_seconds_count 1000 1610013460
+go_gc_duration_seconds_count 1000 1610013561
+go_gc_duration_seconds_count 1000 1610013662
+go_gc_duration_seconds_count 1000 1610013763
+go_gc_duration_seconds_count 1000 1610013864
+go_gc_duration_seconds_count 1000 1610013965
+go_gc_duration_seconds_count 1000 1610014066
+go_gc_duration_seconds_count 1000 1610014166
+go_gc_duration_seconds_count 1000 1610014267
+go_gc_duration_seconds_count 1000 1610014368
+go_gc_duration_seconds_count 1000 1610014469
+go_gc_duration_seconds_count 1000 1610014570
+go_gc_duration_seconds_count 1000 1610014671
+go_gc_duration_seconds_count 1000 1610014766
+go_gc_duration_seconds_count 1000 1610014866
+go_gc_duration_seconds_count 1000 1610014966
+go_gc_duration_seconds_count 1000 1610015066
+go_gc_duration_seconds_count 1000 1610016166
+# EOF
