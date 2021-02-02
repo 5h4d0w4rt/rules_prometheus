@@ -25,5 +25,5 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: Run bazel build
-        run: bazel build //...
+      - name: Build and test everything
+        run: bazel build //... && bazel test //...
