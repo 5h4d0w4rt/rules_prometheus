@@ -108,11 +108,11 @@ _ALERTMANAGER_VERSION_ARCH_SHA_MAPPING = {
 }
 
 PrometheusMetadataInfo = provider(
-    doc = "",
+    doc = "Provides metadata for building http_archive objects",
     fields = {
-        "available_architectures": "",
-        "prometheus": "",
-        "alertmanager": "",
+        "available_architectures": "list of available architectures",
+        "prometheus": "prometheus metadata",
+        "alertmanager": "alertmanager metadata",
     },
 )
 
