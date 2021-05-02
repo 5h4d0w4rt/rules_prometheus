@@ -1,5 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load(":toolchain.bzl", "declare_toolchains")
+load(":toolchain.bzl", "declare_toolchains_dummy", "declare_toolchains_prod")
 
 package(
     default_visibility = [
@@ -59,4 +59,37 @@ toolchain_type(
     visibility = ["//visibility:public"],
 )
 
-declare_toolchains()
+declare_toolchains_prod(
+    architectures = (
+        "darwin-amd64",
+    ),
+)
+
+declare_toolchains_dummy(
+    architectures = (
+        "dragonfly-amd64",
+        "freebsd-386",
+        "freebsd-amd64",
+        "freebsd-armv6",
+        "freebsd-armv7",
+        "linux-386",
+        "linux-amd64",
+        "linux-arm64",
+        "linux-armv5",
+        "linux-armv6",
+        "linux-armv7",
+        "linux-mips64",
+        "linux-mips64le",
+        "linux-ppc64",
+        "linux-ppc64le",
+        "linux-s390x",
+        "netbsd-386",
+        "netbsd-amd64",
+        "netbsd-armv6",
+        "netbsd-armv7",
+        "openbsd-386",
+        "openbsd-amd64",
+        "windows-386",
+        "windows-amd64",
+    ),
+)

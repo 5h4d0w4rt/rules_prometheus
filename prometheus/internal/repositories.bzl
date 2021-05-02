@@ -19,18 +19,18 @@ exports_files([
 """
 
 PrometheusBinaryInfo = provider(
-    doc = "Provides binary metadata for prometheus server binary",
+    doc = "Provides metadata for prometheus server binary",
     fields = {
         "version": "Current version",
-        "available_binaries": "list of available binaries via mapping (version, architecture): sha checksum of binary's archive",
+        "available_binaries": "list of available binaries represented as a mapping (version, architecture): sha checksum of binary's archive",
     },
 )
 
 AlertmanagerBinaryInfo = provider(
-    doc = "Provides binary metadata for alertmanager binary",
+    doc = "Provides metadata for alertmanager binary",
     fields = {
         "version": "Current version",
-        "available_binaries": "list of available binaries via mapping (version, architecture): sha checksum of binary's archive",
+        "available_binaries": "list of available binaries represented as a mapping (version, architecture): sha checksum of binary's archive",
     },
 )
 PrometheusPackageInfo = provider(
@@ -170,22 +170,6 @@ def _build_http_archives(
             build_file_content = http_archive_info.alertmanager_http_archive_info.build_file_content,
         )
 
-def _prometheus_repositories_impl(
-        prometheus_package_info,
-        http_archive_factory = _build_http_archives):
-    """prometheus_repositories main implementation function
-
-    Args:
-        prometheus_package_info: prometheus package metadata provider
-        http_archive_factory: http_archive(s) factory function
-    """
-
-    http_archive_factory(
-        prometheus_package_info = prometheus_package_info,
-    )
-
-    prometheus_register_toolchains()
-
 def _validate_prometheus_package_info(prometheus_package_info):
     if not prometheus_package_info.prometheus_binary_info.version in [key[0] for key in prometheus_package_info.prometheus_binary_info.available_binaries]:
         fail(
@@ -196,6 +180,27 @@ def _validate_prometheus_package_info(prometheus_package_info):
         fail(
             "No %s in supported alertmanager versions" % prometheus_package_info.alertmanager_binary_info.version,
         )
+
+def _prometheus_repositories_impl(
+        prometheus_package_info,
+        http_archive_factory = _build_http_archives):
+    """prometheus_repositories main implementation function
+
+    Args:
+        prometheus_package_info: prometheus package metadata provider
+        http_archive_factory: http_archive(s) factory function
+    """
+
+    toolchains = []
+
+    http_archive_factory(
+        prometheus_package_info = prometheus_package_info,
+    )
+
+    for arch in prometheus_package_info.available_architectures:
+        toolchains.append("@io_bazel_rules_prometheus//prometheus/internal:prometheus_toolchain_%s" % arch)
+
+    prometheus_register_toolchains(toolchains)
 
 def prometheus_repositories(
         prometheus_version = _PROMETHEUS_DEFAULT_VERSION,
