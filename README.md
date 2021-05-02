@@ -56,7 +56,7 @@ promtool_config_test(
 ```bash
 bazel test //examples:test_config_yml
 
-//examples:test_config_yml                                      (cached) PASSED in 0.1s
+//examples:test_config_yml                                      PASSED in 0.1s
 ```
 
 
