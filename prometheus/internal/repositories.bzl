@@ -1,8 +1,10 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load(":toolchain.bzl", "prometheus_register_toolchains")
+load(":toolchain.bzl", "build_toolchains", "prometheus_register_toolchains")
 
 _PROMETHEUS_DEFAULT_VERSION = "2.26.0"
 _ALERTMANAGER_DEFAULT_VERSION = "0.21.0"
+
+_DEFAULT_HTTP_ARCHIVE_EXTENSION = "tar.gz"
 
 _PROMETHEUS_BUILD_FILE_CONTENT = """
 exports_files([
@@ -33,6 +35,7 @@ AlertmanagerBinaryInfo = provider(
         "available_binaries": "list of available binaries represented as a mapping (version, architecture): sha checksum of binary's archive",
     },
 )
+
 PrometheusPackageInfo = provider(
     doc = "Provides metadata for building http_archive objects",
     fields = {
@@ -42,133 +45,100 @@ PrometheusPackageInfo = provider(
     },
 )
 
-PrometheusHttpArchiveInfo = provider(
-    doc = "Prometheus binary download info provider",
+HttpArchiveInfo = provider(
+    doc = "Blob download info provider",
     fields = {
         "name": "unique name for to-be initialized bazel repository",
-        "sha256": "sha256 checksum of prometheus binary",
-        "version": "specific version of prometheus binary",
+        "sha256": "sha256 checksum of the blob",
+        "version": "specific version of the binary",
         "arch": "binary architecture",
-        "urls": "list of urls to download binary from",
+        "urls": "list of urls to download blob from",
         "strip_prefix": "A directory prefix to strip from the extracted files",
         "build_file_content": "bazel build file content after unpacking",
-    },
-)
-
-AlertmanagerHttpArchiveInfo = provider(
-    doc = "Alertmanager binary download info provider",
-    fields = {
-        "name": "unique name for to-be initialized bazel repository",
-        "sha256": "sha256 checksum of alertmanager binary",
-        "version": "specific version of alertmanager binary",
-        "arch": "binary architecture",
-        "urls": "list of urls to download binary from",
-        "strip_prefix": "A directory prefix to strip from the extracted files",
-        "build_file_content": "bazel build file content after unpacking",
-    },
-)
-
-PrometheusPackageHttpArchiveInfo = provider(
-    doc = "Unified binary download info provider",
-    fields = {
-        "prometheus_http_archive_info": "Prometheus download provider",
-        "alertmanager_http_archive_info": "Alertmanager download provider",
     },
 )
 
 def _http_archive_provider_factory(
+        binary,
         arch,
-        prometheus_version,
-        alertmanager_version,
-        prometheus_sha256,
-        alertmanager_sha256,
-        prometheus_build_file_content,
-        alertmanager_build_file_content):
-    return PrometheusPackageHttpArchiveInfo(
-        prometheus_http_archive_info = PrometheusHttpArchiveInfo(
-            name = "prometheus_%s" % arch,
-            sha256 = prometheus_sha256,
-            version = prometheus_version,
+        version,
+        sha256,
+        build_file_content,
+        archive_extension = _DEFAULT_HTTP_ARCHIVE_EXTENSION):
+    return HttpArchiveInfo(
+        name = "{binary}_{arch}".format(
+            binary = binary,
             arch = arch,
-            urls = [(
-                "https://github.com/prometheus/prometheus/releases/download/" +
-                "v{version}/prometheus-{version}.{arch}.tar.gz".format(
-                    version = prometheus_version,
-                    arch = arch,
-                )
-            )],
-            strip_prefix = "prometheus-{version}.{arch}".format(
-                version = prometheus_version,
-                arch = arch,
-            ),
-            build_file_content = prometheus_build_file_content,
         ),
-        alertmanager_http_archive_info = AlertmanagerHttpArchiveInfo(
-            name = "alertmanager_%s" % arch,
-            sha256 = alertmanager_sha256,
-            version = alertmanager_version,
+        sha256 = sha256,
+        version = version,
+        arch = arch,
+        urls = [(
+            "https://github.com/prometheus/{binary}/releases/download/".format(
+                binary = binary,
+            ) +
+            "v{version}/{binary}-{version}.{arch}.{archive_extension}".format(
+                version = version,
+                arch = arch,
+                binary = binary,
+                archive_extension = archive_extension,
+            )
+        )],
+        strip_prefix = "{binary}-{version}.{arch}".format(
+            version = version,
             arch = arch,
-            urls = [(
-                "https://github.com/prometheus/alertmanager/releases/download/" +
-                "v{version}/alertmanager-{version}.{arch}.tar.gz".format(
-                    version = alertmanager_version,
-                    arch = arch,
-                )
-            )],
-            strip_prefix = "alertmanager-{version}.{arch}".format(
-                version = alertmanager_version,
-                arch = arch,
-            ),
-            build_file_content = alertmanager_build_file_content,
+            binary = binary,
         ),
+        build_file_content = build_file_content,
+    )
+
+def _http_archive_factory(ctx):
+    """build http_archive objects from context"""
+    return http_archive(
+        name = ctx.name,
+        sha256 = ctx.sha256,
+        urls = ctx.urls,
+        strip_prefix = ctx.strip_prefix,
+        build_file_content = ctx.build_file_content,
     )
 
 def _build_http_archives(
         prometheus_package_info,
-        http_archive_provider = _http_archive_provider_factory,
+        http_archive_info = _http_archive_provider_factory,
+        http_archive_factory = _http_archive_factory,
         prometheus_build_file_content = _PROMETHEUS_BUILD_FILE_CONTENT,
         alertmanager_build_file_content = _ALERTMANAGER_BUILD_FILE_CONTENT):
     """Factory will build a set of http_archive objects for bazel's toolchain consumption
 
     Args:
         prometheus_package_info: prometheus package metadata provider
-        http_archive_provider: http_archive_provider factory function
+        http_archive_info: factory function which builds HttpArchiveInfo objects
+        http_archive_factory: factory function which builds http_archive bazel rules
         prometheus_build_file_content: BUILD file content for resulting bazel repository
         alertmanager_build_file_content: BUILD file content for resulting bazel repository
     """
 
     for arch in prometheus_package_info.available_architectures:
-        http_archive_info = http_archive_provider(
+        http_archive_factory(http_archive_info(
+            binary = "prometheus",
             arch = arch,
-            prometheus_version = prometheus_package_info.prometheus_binary_info.version,
-            alertmanager_version = prometheus_package_info.alertmanager_binary_info.version,
-            prometheus_build_file_content = prometheus_build_file_content,
-            alertmanager_build_file_content = alertmanager_build_file_content,
-            prometheus_sha256 = prometheus_package_info.prometheus_binary_info.available_binaries[(
+            version = prometheus_package_info.prometheus_binary_info.version,
+            build_file_content = prometheus_build_file_content,
+            sha256 = prometheus_package_info.prometheus_binary_info.available_binaries[(
                 prometheus_package_info.prometheus_binary_info.version,
                 arch,
             )],
-            alertmanager_sha256 = prometheus_package_info.alertmanager_binary_info.available_binaries[(
+        ))
+        http_archive_factory(http_archive_info(
+            binary = "alertmanager",
+            arch = arch,
+            version = prometheus_package_info.alertmanager_binary_info.version,
+            build_file_content = alertmanager_build_file_content,
+            sha256 = prometheus_package_info.alertmanager_binary_info.available_binaries[(
                 prometheus_package_info.alertmanager_binary_info.version,
                 arch,
             )],
-        )
-
-        http_archive(
-            name = http_archive_info.prometheus_http_archive_info.name,
-            sha256 = http_archive_info.prometheus_http_archive_info.sha256,
-            urls = http_archive_info.prometheus_http_archive_info.urls,
-            strip_prefix = http_archive_info.prometheus_http_archive_info.strip_prefix,
-            build_file_content = http_archive_info.prometheus_http_archive_info.build_file_content,
-        )
-
-        http_archive(
-            name = http_archive_info.alertmanager_http_archive_info.name,
-            sha256 = http_archive_info.alertmanager_http_archive_info.sha256,
-            urls = http_archive_info.alertmanager_http_archive_info.urls,
-            strip_prefix = http_archive_info.alertmanager_http_archive_info.strip_prefix,
-            build_file_content = http_archive_info.alertmanager_http_archive_info.build_file_content,
-        )
+        ))
 
 def _validate_prometheus_package_info(prometheus_package_info):
     if not prometheus_package_info.prometheus_binary_info.version in [key[0] for key in prometheus_package_info.prometheus_binary_info.available_binaries]:
@@ -183,24 +153,21 @@ def _validate_prometheus_package_info(prometheus_package_info):
 
 def _prometheus_repositories_impl(
         prometheus_package_info,
-        http_archive_factory = _build_http_archives):
+        http_archive_factory = _build_http_archives,
+        native_toolchains_factory = build_toolchains):
     """prometheus_repositories main implementation function
 
     Args:
         prometheus_package_info: prometheus package metadata provider
         http_archive_factory: http_archive(s) factory function
+        native_toolchains_factory: toolchain linker factory function
     """
-
-    toolchains = []
 
     http_archive_factory(
         prometheus_package_info = prometheus_package_info,
     )
 
-    for arch in prometheus_package_info.available_architectures:
-        toolchains.append("@io_bazel_rules_prometheus//prometheus/internal:prometheus_toolchain_%s" % arch)
-
-    prometheus_register_toolchains(toolchains)
+    prometheus_register_toolchains(native_toolchains_factory(prometheus_package_info.available_architectures))
 
 def prometheus_repositories(
         prometheus_version = _PROMETHEUS_DEFAULT_VERSION,
