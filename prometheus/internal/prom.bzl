@@ -37,7 +37,7 @@ scrape_configs:
 
 def _prometheus_impl(ctx):
     prom_info = (
-        ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"]
+        ctx.toolchains["@io_bazel_rules_prometheus//prometheus:toolchain"]
             .prometheusToolchainInfo
             .prometheus
     )
@@ -68,7 +68,7 @@ _prometheus = rule(
         ),
     },
     executable = True,
-    toolchains = ["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"],
+    toolchains = ["@io_bazel_rules_prometheus//prometheus:toolchain"],
 )
 
 def prometheus(name, **kwargs):
@@ -108,7 +108,7 @@ def prometheus(name, **kwargs):
 
 def _prometheus_server_impl(ctx):
     prom_info = (
-        ctx.toolchains["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"]
+        ctx.toolchains["@io_bazel_rules_prometheus//prometheus:toolchain"]
             .prometheusToolchainInfo
             .prometheus
     )
@@ -172,5 +172,5 @@ prometheus_server = rule(
         "scrape_jobs": attr.string(default = ""),
         "additional_contents": attr.string(default = ""),
     },
-    toolchains = ["@io_bazel_rules_prometheus//prometheus/internal:toolchain_type"],
+    toolchains = ["@io_bazel_rules_prometheus//prometheus:toolchain"],
 )

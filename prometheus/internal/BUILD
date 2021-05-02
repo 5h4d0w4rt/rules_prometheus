@@ -54,11 +54,6 @@ bzl_library(
     deps = [":toolchain"],
 )
 
-toolchain_type(
-    name = "toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
 declare_toolchains_prod(
     architectures = (
         "darwin-amd64",

@@ -65,7 +65,7 @@ def declare_toolchains_prod(architectures):
                 "@platforms//cpu:x86_64",
             ],
             toolchain = "@io_bazel_rules_prometheus//prometheus/internal:prometheus_%s" % arch,
-            toolchain_type = "@io_bazel_rules_prometheus//prometheus/internal:toolchain_type",
+            toolchain_type = "@io_bazel_rules_prometheus//prometheus:toolchain",
         )
 
 def declare_toolchains_dummy(architectures):
@@ -83,8 +83,17 @@ def declare_toolchains_dummy(architectures):
         native.toolchain(
             name = "prometheus_toolchain_%s" % arch,
             toolchain = "@io_bazel_rules_prometheus//prometheus/internal:prometheus_%s" % arch,
-            toolchain_type = "@io_bazel_rules_prometheus//prometheus/internal:toolchain_type",
+            toolchain_type = "@io_bazel_rules_prometheus//prometheus:toolchain",
         )
+
+def _link_toolchain_to_prometheus_toolchain(arch):
+    return "@io_bazel_rules_prometheus//prometheus/internal:prometheus_toolchain_%s" % arch
+
+def build_toolchains(architectures, toolchain_linker = _link_toolchain_to_prometheus_toolchain):
+    return [
+        toolchain_linker(arch)
+        for arch in architectures
+    ]
 
 def prometheus_register_toolchains(toolchains):
     """Register all toolchains"""

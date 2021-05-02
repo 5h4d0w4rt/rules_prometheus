@@ -3,6 +3,11 @@ load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
 
 package(default_visibility = ["//visibility:public"])
 
+toolchain_type(
+    name = "toolchain",
+    visibility = ["//visibility:public"],
+)
+
 exports_files([
     "defs.bzl",
 ])
