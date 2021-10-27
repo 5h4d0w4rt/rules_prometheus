@@ -15,19 +15,10 @@ load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
 
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load("@io_bazel_rules_prometheus//:deps.bzl", "prometheus_repositories")
 
-git_repository(
-    name = "io_bazel_stardoc",
-    commit = "4378e9b6bb2831de7143580594782f538f461180",
-    remote = "https://github.com/bazelbuild/stardoc.git",
-    shallow_since = "1570829166 -0400",
-)
+prometheus_repositories()
 
 load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
 
 stardoc_repositories()
-
-load("@io_bazel_rules_prometheus//:deps.bzl", "prometheus_repositories")
-
-prometheus_repositories()

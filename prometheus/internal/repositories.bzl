@@ -1,4 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load(":toolchain.bzl", "build_toolchains", "prometheus_register_toolchains")
 
 _PROMETHEUS_DEFAULT_VERSION = "2.26.0"
@@ -178,6 +179,13 @@ def prometheus_repositories(
         prometheus_version: Prometheus package version to download from source repositories if supported by reposiory
         alertmanager_version: Alertmanager package version to download from source repositories if supported by reposiory
     """
+
+    git_repository(
+        name = "io_bazel_stardoc",
+        commit = "4378e9b6bb2831de7143580594782f538f461180",
+        remote = "https://github.com/bazelbuild/stardoc.git",
+        shallow_since = "1570829166 -0400",
+    )
 
     prometheus_package_info = PrometheusPackageInfo(
         available_architectures = (
