@@ -65,6 +65,13 @@ def declare_toolchains_prod(architectures):
 def declare_toolchains_dummy(architectures):
     """Experimental: Create toolchain dummies for all platforms"""
 
+    native.constraint_setting(
+        name = "phantom",
+    )
+    native.constraint_value(
+        name = "nonexistent",
+        constraint_setting = ":phantom",
+    )
     for arch in architectures:
         prometheus_toolchain(
             name = "prometheus_%s" % arch,
@@ -76,6 +83,8 @@ def declare_toolchains_dummy(architectures):
 
         native.toolchain(
             name = "prometheus_toolchain_%s" % arch,
+            exec_compatible_with = [":nonexistent"],
+            target_compatible_with = [":nonexistent"],
             toolchain = "@io_bazel_rules_prometheus//prometheus/internal:prometheus_%s" % arch,
             toolchain_type = "@io_bazel_rules_prometheus//prometheus:toolchain",
         )
