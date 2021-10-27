@@ -45,7 +45,7 @@ prometheus_toolchain = rule(
 def declare_toolchains_prod(architectures):
     """Create prometheus_toolchain rules for every supported platform and link toolchains to them"""
 
-    for arch in architectures:
+    for (arch, compatibility) in architectures.items():
         prometheus_toolchain(
             name = "prometheus_%s" % arch,
             prometheus = "@prometheus_%s//:prometheus" % arch,
@@ -56,14 +56,8 @@ def declare_toolchains_prod(architectures):
 
         native.toolchain(
             name = "prometheus_toolchain_%s" % arch,
-            exec_compatible_with = [
-                "@platforms//os:osx",
-                "@platforms//cpu:x86_64",
-            ],
-            target_compatible_with = [
-                "@platforms//os:osx",
-                "@platforms//cpu:x86_64",
-            ],
+            exec_compatible_with = compatibility.get("exec"),
+            target_compatible_with = compatibility.get("target"),
             toolchain = "@io_bazel_rules_prometheus//prometheus/internal:prometheus_%s" % arch,
             toolchain_type = "@io_bazel_rules_prometheus//prometheus:toolchain",
         )

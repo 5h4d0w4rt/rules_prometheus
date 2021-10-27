@@ -55,9 +55,28 @@ bzl_library(
 )
 
 declare_toolchains_prod(
-    architectures = (
-        "darwin-amd64",
-    ),
+    architectures = {
+        "darwin-amd64": {
+            "exec": [
+                "@platforms//os:osx",
+                "@platforms//cpu:x86_64",
+            ],
+            "target": [
+                "@platforms//os:osx",
+                "@platforms//cpu:x86_64",
+            ],
+        },
+        "linux-amd64": {
+            "exec": [
+                "@platforms//os:linux",
+                "@platforms//cpu:x86_64",
+            ],
+            "target": [
+                "@platforms//os:linux",
+                "@platforms//cpu:x86_64",
+            ],
+        },
+    },
 )
 
 declare_toolchains_dummy(
@@ -68,7 +87,6 @@ declare_toolchains_dummy(
         "freebsd-armv6",
         "freebsd-armv7",
         "linux-386",
-        "linux-amd64",
         "linux-arm64",
         "linux-armv5",
         "linux-armv6",
