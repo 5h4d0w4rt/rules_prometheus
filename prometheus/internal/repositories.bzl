@@ -1,4 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load(":toolchain.bzl", "build_toolchains", "prometheus_register_toolchains")
 load(":platforms.bzl", "PLATFORMS")
 
@@ -192,6 +193,14 @@ def prometheus_repositories(
         alertmanager_version: Alertmanager package version to download from source repositories if supported by reposiory
         _platforms_info: pre-built PrometheusPlatformInfo provider with info on all available os+architectures
     """
+
+    # required to build docs on downstream callers
+    git_repository(
+        name = "io_bazel_stardoc",
+        commit = "4378e9b6bb2831de7143580594782f538f461180",
+        remote = "https://github.com/bazelbuild/stardoc.git",
+        shallow_since = "1570829166 -0400",
+    )
 
     # TODO(5h4d0w4rt) add custom version support
     prometheus_package_info = PrometheusPackageInfo(
