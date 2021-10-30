@@ -1,4 +1,5 @@
 load(":providers.bzl", "AlertmanagerInfo", "AmtoolInfo", "PrometheusInfo", "PromtoolInfo")
+load(":platforms.bzl", "CpuConstraintsInfo", "OsConstraintsInfo", "PLATFORMS")
 
 PrometheusToolchainInfo = provider(
     doc = "Prometheus Toolchain metadata, contains prometheus, alertmanager, promtool and amtool's necessary data",
@@ -13,22 +14,23 @@ PrometheusToolchainInfo = provider(
 
 def _prometheus_toolchain_impl(ctx):
     """Toolchain main implementation function"""
-    toolchain_info = platform_common.ToolchainInfo(
-        prometheusToolchainInfo = PrometheusToolchainInfo(
-            name = ctx.label.name,
-            prometheus = PrometheusInfo(
-                tool = ctx.attr.prometheus,
-                template = ctx.attr.prometheus_executor_template,
+    return [
+        platform_common.ToolchainInfo(
+            prometheusToolchainInfo = PrometheusToolchainInfo(
+                name = ctx.label.name,
+                prometheus = PrometheusInfo(
+                    tool = ctx.attr.prometheus,
+                    template = ctx.attr.prometheus_executor_template,
+                ),
+                promtool = PromtoolInfo(
+                    tool = ctx.attr.promtool,
+                    template = ctx.attr.promtool_executor_template,
+                ),
+                amtool = AmtoolInfo(),
+                alertmanager = AlertmanagerInfo(),
             ),
-            promtool = PromtoolInfo(
-                tool = ctx.attr.promtool,
-                template = ctx.attr.promtool_executor_template,
-            ),
-            amtool = AmtoolInfo(),
-            alertmanager = AlertmanagerInfo(),
         ),
-    )
-    return [toolchain_info]
+    ]
 
 prometheus_toolchain = rule(
     implementation = _prometheus_toolchain_impl,
@@ -42,47 +44,41 @@ prometheus_toolchain = rule(
     provides = [platform_common.ToolchainInfo],
 )
 
-def declare_toolchains_prod(architectures):
-    """Create prometheus_toolchain rules for every supported platform and link toolchains to them"""
+def declare_toolchains(_platforms_info = PLATFORMS):
+    """
+        Create prometheus_toolchain rules for every supported platform and link toolchains to them
 
-    for arch in architectures:
+    Args:
+        _platforms_info: pre-built PrometheusPlatformInfo provider with info on all available os+architectures
+    """
+
+    for platform in _platforms_info.available_platforms:
+        platform_info = getattr(_platforms_info.platforms, platform)
+
         prometheus_toolchain(
-            name = "prometheus_%s" % arch,
-            prometheus = "@prometheus_%s//:prometheus" % arch,
-            promtool = "@prometheus_%s//:promtool" % arch,
+            name = "prometheus_{platform}".format(platform = platform),
+            prometheus = "@prometheus_{platform}//:prometheus".format(platform = platform),
+            promtool = "@prometheus_{platform}//:promtool".format(platform = platform),
             promtool_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:promtool.sh.tpl",
             prometheus_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:prometheus.sh.tpl",
+
+            # https://docs.bazel.build/versions/main/be/common-definitions.html#common.tags
+            # exclude toolchain from expanding on wildcard
+            # so you won't download all dependencies for all platforms
+            tags = ["manual"],
         )
 
         native.toolchain(
-            name = "prometheus_toolchain_%s" % arch,
-            exec_compatible_with = [
-                "@platforms//os:osx",
-                "@platforms//cpu:x86_64",
-            ],
+            name = "prometheus_toolchain_{platform}".format(platform = platform),
             target_compatible_with = [
-                "@platforms//os:osx",
-                "@platforms//cpu:x86_64",
+                getattr(OsConstraintsInfo, platform_info.os),
+                getattr(CpuConstraintsInfo, platform_info.cpu),
             ],
-            toolchain = "@io_bazel_rules_prometheus//prometheus/internal:prometheus_%s" % arch,
-            toolchain_type = "@io_bazel_rules_prometheus//prometheus:toolchain",
-        )
-
-def declare_toolchains_dummy(architectures):
-    """Experimental: Create toolchain dummies for all platforms"""
-
-    for arch in architectures:
-        prometheus_toolchain(
-            name = "prometheus_%s" % arch,
-            prometheus = "@prometheus_%s//:prometheus" % arch,
-            promtool = "@prometheus_%s//:promtool" % arch,
-            promtool_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:promtool.sh.tpl",
-            prometheus_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:prometheus.sh.tpl",
-        )
-
-        native.toolchain(
-            name = "prometheus_toolchain_%s" % arch,
-            toolchain = "@io_bazel_rules_prometheus//prometheus/internal:prometheus_%s" % arch,
+            exec_compatible_with = [
+                getattr(OsConstraintsInfo, platform_info.os),
+                getattr(CpuConstraintsInfo, platform_info.cpu),
+            ],
+            toolchain = ":prometheus_{platform}".format(platform = platform),
             toolchain_type = "@io_bazel_rules_prometheus//prometheus:toolchain",
         )
 

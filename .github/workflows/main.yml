@@ -26,4 +26,18 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Build and test everything
-        run: bazel build //... && bazel test //...
+        run: bazelisk build //... && bazelisk test //...
+
+  # TODO(5h4d0w4rt) add cross-build https://github.com/marketplace/actions/run-on-architecture
+  build-linux:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Build and test everything
+        run: bazelisk build //... && bazelisk test //...

@@ -1,5 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load(":toolchain.bzl", "declare_toolchains_dummy", "declare_toolchains_prod")
+load(":toolchain.bzl", "declare_toolchains")
+load(":platforms.bzl", "declare_constraints")
 
 package(
     default_visibility = [
@@ -43,48 +44,28 @@ bzl_library(
 )
 
 bzl_library(
+    name = "platforms",
+    srcs = ["platforms.bzl"],
+)
+
+bzl_library(
     name = "toolchain",
     srcs = ["toolchain.bzl"],
-    deps = [":providers"],
+    deps = [
+        ":platforms",
+        ":providers",
+    ],
 )
 
 bzl_library(
     name = "repositories",
     srcs = ["repositories.bzl"],
-    deps = [":toolchain"],
+    deps = [
+        ":platforms",
+        ":toolchain",
+    ],
 )
 
-declare_toolchains_prod(
-    architectures = (
-        "darwin-amd64",
-    ),
-)
+declare_constraints()
 
-declare_toolchains_dummy(
-    architectures = (
-        "dragonfly-amd64",
-        "freebsd-386",
-        "freebsd-amd64",
-        "freebsd-armv6",
-        "freebsd-armv7",
-        "linux-386",
-        "linux-amd64",
-        "linux-arm64",
-        "linux-armv5",
-        "linux-armv6",
-        "linux-armv7",
-        "linux-mips64",
-        "linux-mips64le",
-        "linux-ppc64",
-        "linux-ppc64le",
-        "linux-s390x",
-        "netbsd-386",
-        "netbsd-amd64",
-        "netbsd-armv6",
-        "netbsd-armv7",
-        "openbsd-386",
-        "openbsd-amd64",
-        "windows-386",
-        "windows-amd64",
-    ),
-)
+declare_toolchains()

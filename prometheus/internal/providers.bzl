@@ -31,3 +31,21 @@ AmtoolStubInfo = provider(
     },
 )
 AmtoolInfo = AmtoolStubInfo
+
+PrometheusPlatformsInfo = provider(
+    # this should store os-arch combinations for toolchain generation
+    doc = "OS and CPU platforms, constraints and available architectures metadata provider",
+    fields = {
+        "platforms": "mapping of PrometheusPlatformInfo providers",
+        "available_platforms": "list of platforms",
+    },
+)
+
+PrometheusPlatformInfo = provider(
+    # this should store os-arch combinations for toolchain generation
+    doc = "OS and CPU platform constraints metadata provider",
+    fields = [
+        "os",
+        "cpu",
+    ],
+)
