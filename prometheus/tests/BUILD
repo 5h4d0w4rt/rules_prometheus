@@ -12,6 +12,7 @@ analysis_test(
     targets = [
         "@io_bazel_rules_prometheus//:promtool",
         "@io_bazel_rules_prometheus//:prom",
+        "@io_bazel_rules_prometheus//prometheus:defs",
     ],
 )
 
@@ -20,6 +21,7 @@ build_test(
     targets = [
         "@io_bazel_rules_prometheus//:promtool",
         "@io_bazel_rules_prometheus//:prom",
+        "@io_bazel_rules_prometheus//prometheus:defs",
     ],
 )
 
