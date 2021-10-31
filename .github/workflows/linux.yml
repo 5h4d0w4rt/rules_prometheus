@@ -1,0 +1,67 @@
+name: CI/Build/Linux
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main, pull_request ]
+    paths-ignore:
+      - README.md
+      - LICENSE
+      - .gitignore
+  pull_request:
+    branches: [ main, pull_request ]
+    paths-ignore:
+      - README.md
+      - LICENSE
+      - .gitignore
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-linux-x86_64:
+      # this is linux-amd64
+      # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Build and test everything
+        run: uname -a && bazelisk build //... && bazelisk test //... && bazelisk build //:promtool
+
+
+  # TODO(5h4d0w4rt) add cross-build https://github.com/marketplace/actions/run-on-architecture
+  # TODO(5h4d0w4rt) finish this; should build bazel binary for proper arches
+  # https://github.com/koenvervloesem/bazel-on-arm/releases example
+
+  # build-matrix-linux:
+  #   runs-on: ubuntu-20.04
+  #   name: Build on ${{ matrix.distro }} ${{ matrix.arch }}
+
+    # Run steps on a matrix of 3 arch/distro combinations
+    # strategy:
+    #   matrix:
+    #     include:
+    #       - arch: aarch64
+    #         distro: ubuntu20.04
+    #       - arch: ppc64le
+    #         distro: ubuntu20.04
+    #       - arch: s390x
+    #         distro: ubuntu20.04
+    # steps:
+    #   - uses: actions/checkout@v2.1.0
+      # - uses: uraimo/run-on-arch-action@v2.0.5
+      #   name: Build ${{ matrix.arch }}-${{ matrix.distro }}
+      #   id: build
+      #   with:
+      #     arch: ${{ matrix.arch }}
+      #     distro: ${{ matrix.distro }}
+      #     run: |
+      #       uname -a
+
+      #       bazelisk build //... && bazelisk test //... && bazelisk build //:promtool
