@@ -99,9 +99,12 @@ PLATFORMS = platform_info_factory(
     _LIST_OF_PLATFORMS,
 )
 
-def declare_constraints(_platforms_info = PLATFORMS):
-    """Generates constraint_values and platform targets for valid platforms.
+def declare_platforms(name, _platforms_info = PLATFORMS):
+    """
+        Generates constraint_values and platform targets for valid platforms.
+
     Args:
+        name: name
         _platforms_info: pre-built PrometheusPlatformInfo provider with info on all available os+architectures
     """
 

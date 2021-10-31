@@ -66,6 +66,6 @@ bzl_library(
     ],
 )
 
-declare_constraints()
+declare_platforms(name = "constraints")
 
-declare_toolchains()
+declare_toolchains(name = "toolchains")

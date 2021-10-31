@@ -1,5 +1,6 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load(":toolchain.bzl", "build_toolchains", "prometheus_register_toolchains")
 load(":platforms.bzl", "PLATFORMS")
 
@@ -166,21 +167,25 @@ def _validate_prometheus_package_info(prometheus_package_info):
 
 def _prometheus_repositories_impl(
         prometheus_package_info,
-        http_archive_factory = _build_http_archives,
+        http_archives_factory = _build_http_archives,
         native_toolchains_factory = build_toolchains):
     """prometheus_repositories main implementation function
 
     Args:
         prometheus_package_info: prometheus package metadata provider
-        http_archive_factory: http_archive(s) factory function
+        http_archives_factory: http_archive(s) factory function
         native_toolchains_factory: toolchain linker factory function
     """
 
-    http_archive_factory(
+    http_archives_factory(
         prometheus_package_info = prometheus_package_info,
     )
 
-    prometheus_register_toolchains(native_toolchains_factory(prometheus_package_info.platforms_info.available_platforms))
+    prometheus_register_toolchains(
+        native_toolchains_factory(
+            prometheus_package_info.platforms_info.available_platforms,
+        ),
+    )
 
 def prometheus_repositories(
         prometheus_version = _PROMETHEUS_DEFAULT_VERSION,
@@ -195,11 +200,34 @@ def prometheus_repositories(
     """
 
     # required to build docs on downstream callers
-    git_repository(
+    # maybe = don't download if already present
+    # https://docs.bazel.build/versions/main/repo/utils.html#maybe
+    maybe(
+        git_repository,
         name = "io_bazel_stardoc",
         commit = "4378e9b6bb2831de7143580594782f538f461180",
         remote = "https://github.com/bazelbuild/stardoc.git",
         shallow_since = "1570829166 -0400",
+    )
+
+    maybe(
+        http_archive,
+        name = "platforms",
+        sha256 = "079945598e4b6cc075846f7fd6a9d0857c33a7afc0de868c2ccb96405225135d",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/0.0.4/platforms-0.0.4.tar.gz",
+            "https://github.com/bazelbuild/platforms/releases/download/0.0.4/platforms-0.0.4.tar.gz",
+        ],
+    )
+
+    maybe(
+        http_archive,
+        name = "bazel_skylib",
+        sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
+        urls = [
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+        ],
     )
 
     # TODO(5h4d0w4rt) add custom version support

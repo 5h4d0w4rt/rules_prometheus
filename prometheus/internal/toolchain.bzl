@@ -91,6 +91,6 @@ def build_toolchains(architectures, toolchain_linker = _link_toolchain_to_promet
         for arch in architectures
     ]
 
-def prometheus_register_toolchains(toolchains):
+def prometheus_register_toolchains(name, toolchains):
     """Register all toolchains"""
     native.register_toolchains(*toolchains)
