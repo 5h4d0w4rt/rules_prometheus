@@ -2,6 +2,7 @@ load("@//prometheus/internal:toolchain.bzl", "build_toolchains", "prometheus_reg
 load("@//prometheus/internal:platforms.bzl", "PLATFORMS")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 PrometheusBinaryInfo = provider(
     doc = "Provides metadata for prometheus server binary",
@@ -381,6 +382,7 @@ def prometheus_dependencies():
     # maybe = don't download if already present
     # https://docs.bazel.build/versions/main/repo/utils.html#maybe
     # so dependencies are overridable
+
     maybe(
         http_archive,
         name = "io_bazel_stardoc",
@@ -390,6 +392,12 @@ def prometheus_dependencies():
             "https://github.com/bazelbuild/stardoc/releases/download/0.5.0/stardoc-0.5.0.tar.gz",
         ],
     )
+    # maybe(
+    #     git_repository,
+    #     name = "io_bazel_stardoc",
+    #     remote = "https://github.com/bazelbuild/stardoc.git",
+    #     tag = "0.4.0",
+    # )
 
     maybe(
         http_archive,

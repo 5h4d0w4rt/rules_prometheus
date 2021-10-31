@@ -1,5 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-# load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
+load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
 
 package(default_visibility = ["//visibility:public"])
 
