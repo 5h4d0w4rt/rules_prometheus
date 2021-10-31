@@ -1,8 +1,8 @@
 load(
     "@//prometheus:defs.bzl",
-    _prometheus_dependencies = "prometheus_dependencies",
     _prometheus_repositories = "prometheus_repositories",
+    _prometheus_toolchains = "prometheus_toolchains",
 )
 
 rules_prometheus_repositories = _prometheus_repositories
-rules_prometheus_dependencies = _prometheus_dependencies
+rules_prometheus_toolchains = _prometheus_toolchains

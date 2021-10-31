@@ -15,11 +15,13 @@ exports_files([
 bzl_library(
     name = "api",
     srcs = [
-        "//prometheus/internal:prom",
-        "//prometheus/internal:promtool",
-        "//prometheus/internal:providers",
-        "//prometheus/internal:repositories",
-        "//prometheus/internal:toolchain",
+        "@//prometheus/internal:defaults",
+        "@//prometheus/internal:platforms",
+        "@//prometheus/internal:prom",
+        "@//prometheus/internal:promtool",
+        "@//prometheus/internal:providers",
+        "@//prometheus/internal:repositories",
+        "@//prometheus/internal:toolchain",
     ],
 )
 

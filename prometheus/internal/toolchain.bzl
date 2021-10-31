@@ -1,5 +1,5 @@
 load("@//prometheus/internal:providers.bzl", "AlertmanagerInfo", "AmtoolInfo", "PrometheusInfo", "PromtoolInfo")
-load("@//prometheus/internal:platforms.bzl", "CpuConstraintsInfo", "OsConstraintsInfo", "PLATFORMS")
+load("@//prometheus/internal:defaults.bzl", "DEFAULT_PROMETHEUS_PACKAGE_INFO")
 
 PrometheusToolchainInfo = provider(
     doc = "Prometheus Toolchain metadata, contains prometheus, alertmanager, promtool and amtool's necessary data",
@@ -45,17 +45,19 @@ prometheus_toolchain = rule(
     provides = [platform_common.ToolchainInfo],
 )
 
-def declare_toolchains(name, _platforms_info = PLATFORMS):
+def declare_toolchains(name = "declare_toolchains", _prometheus_package_info = DEFAULT_PROMETHEUS_PACKAGE_INFO):
     """
         Create prometheus_toolchain rules for every supported platform and link toolchains to them
 
     Args:
         name: name of the macro
-        _platforms_info: pre-built PrometheusPlatformInfo provider with info on all available os+architectures
+        _prometheus_package_info: pre-built PrometheusPackageInfo provider
+            with info all available os+architectures,
+            expected versions and available binaries of prometheus and alertmanager
     """
 
-    for platform in _platforms_info.available_platforms:
-        platform_info = getattr(_platforms_info.platforms, platform)
+    for platform in _prometheus_package_info.platforms_info.available_platforms:
+        platform_info = getattr(_prometheus_package_info.platforms_info.platforms, platform)
 
         prometheus_toolchain(
             name = "prometheus_{platform}".format(platform = platform),
@@ -72,14 +74,8 @@ def declare_toolchains(name, _platforms_info = PLATFORMS):
 
         native.toolchain(
             name = "prometheus_toolchain_{platform}".format(platform = platform),
-            target_compatible_with = [
-                getattr(OsConstraintsInfo, platform_info.os),
-                getattr(CpuConstraintsInfo, platform_info.cpu),
-            ],
-            exec_compatible_with = [
-                getattr(OsConstraintsInfo, platform_info.os),
-                getattr(CpuConstraintsInfo, platform_info.cpu),
-            ],
+            target_compatible_with = platform_info.os_constraints + platform_info.cpu_constraints,
+            exec_compatible_with = platform_info.os_constraints + platform_info.cpu_constraints,
             toolchain = ":prometheus_{platform}".format(platform = platform),
             toolchain_type = "@//prometheus:toolchain",
         )
@@ -93,6 +89,14 @@ def build_toolchains(architectures, toolchain_linker = _link_toolchain_to_promet
         for arch in architectures
     ]
 
-def prometheus_register_toolchains(name, toolchains):
+def _prometheus_register_toolchains(toolchains):
     """Register all toolchains"""
     native.register_toolchains(*toolchains)
+
+def prometheus_toolchains(
+        name = "prometheus_register_toolchains",
+        _prometheus_package_info = DEFAULT_PROMETHEUS_PACKAGE_INFO):
+    _prometheus_register_toolchains(
+        toolchains =
+            build_toolchains(_prometheus_package_info.platforms_info.available_platforms),
+    )

@@ -1,4 +1,8 @@
 load(
+    "@//prometheus/internal:repositories.bzl",
+    _prometheus_repositories = "prometheus_repositories",
+)
+load(
     "@//prometheus/internal:promtool.bzl",
     _promtool = "promtool",
     _promtool_config_test = "promtool_config_test",
@@ -10,12 +14,11 @@ load(
     _prometheus = "prometheus",
 )
 load(
-    "@//prometheus/internal:repositories.bzl",
-    _prometheus_dependencies = "prometheus_dependencies",
-    _prometheus_repositories = "prometheus_repositories",
+    "@//prometheus/internal:toolchain.bzl",
+    _prometheus_toolchains = "prometheus_toolchains",
 )
 
-prometheus_dependencies = _prometheus_dependencies
+prometheus_toolchains = _prometheus_toolchains
 prometheus_repositories = _prometheus_repositories
 promtool_unit_test = _promtool_unit_test
 promtool_config_test = _promtool_config_test
