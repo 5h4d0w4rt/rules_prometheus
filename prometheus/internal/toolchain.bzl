@@ -1,5 +1,5 @@
-load(":providers.bzl", "AlertmanagerInfo", "AmtoolInfo", "PrometheusInfo", "PromtoolInfo")
-load(":platforms.bzl", "CpuConstraintsInfo", "OsConstraintsInfo", "PLATFORMS")
+load("@//prometheus/internal:providers.bzl", "AlertmanagerInfo", "AmtoolInfo", "PrometheusInfo", "PromtoolInfo")
+load("@//prometheus/internal:platforms.bzl", "CpuConstraintsInfo", "OsConstraintsInfo", "PLATFORMS")
 
 PrometheusToolchainInfo = provider(
     doc = "Prometheus Toolchain metadata, contains prometheus, alertmanager, promtool and amtool's necessary data",
@@ -36,6 +36,7 @@ prometheus_toolchain = rule(
     implementation = _prometheus_toolchain_impl,
     doc = "Prometheus toolchain implements main instruments of this rule set",
     attrs = {
+        # explanation on cfg https://docs.bazel.build/versions/main/skylark/rules.html#configurations
         "prometheus": attr.label(mandatory = True, allow_single_file = True, executable = True, cfg = "exec"),
         "promtool": attr.label(mandatory = True, allow_single_file = True, executable = True, cfg = "exec"),
         "promtool_executor_template": attr.label(mandatory = True, allow_single_file = True),
@@ -44,11 +45,12 @@ prometheus_toolchain = rule(
     provides = [platform_common.ToolchainInfo],
 )
 
-def declare_toolchains(_platforms_info = PLATFORMS):
+def declare_toolchains(name, _platforms_info = PLATFORMS):
     """
         Create prometheus_toolchain rules for every supported platform and link toolchains to them
 
     Args:
+        name: name of the macro
         _platforms_info: pre-built PrometheusPlatformInfo provider with info on all available os+architectures
     """
 
@@ -59,8 +61,8 @@ def declare_toolchains(_platforms_info = PLATFORMS):
             name = "prometheus_{platform}".format(platform = platform),
             prometheus = "@prometheus_{platform}//:prometheus".format(platform = platform),
             promtool = "@prometheus_{platform}//:promtool".format(platform = platform),
-            promtool_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:promtool.sh.tpl",
-            prometheus_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:prometheus.sh.tpl",
+            promtool_executor_template = "@//prometheus/internal:promtool.sh.tpl",
+            prometheus_executor_template = "@//prometheus/internal:prometheus.sh.tpl",
 
             # https://docs.bazel.build/versions/main/be/common-definitions.html#common.tags
             # exclude toolchain from expanding on wildcard
@@ -79,11 +81,11 @@ def declare_toolchains(_platforms_info = PLATFORMS):
                 getattr(CpuConstraintsInfo, platform_info.cpu),
             ],
             toolchain = ":prometheus_{platform}".format(platform = platform),
-            toolchain_type = "@io_bazel_rules_prometheus//prometheus:toolchain",
+            toolchain_type = "@//prometheus:toolchain",
         )
 
 def _link_toolchain_to_prometheus_toolchain(arch):
-    return "@io_bazel_rules_prometheus//prometheus/internal:prometheus_toolchain_%s" % arch
+    return "@//prometheus/internal:prometheus_toolchain_%s" % arch
 
 def build_toolchains(architectures, toolchain_linker = _link_toolchain_to_prometheus_toolchain):
     return [
