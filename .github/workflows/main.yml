@@ -26,7 +26,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Build and test everything
-        run: bazelisk build //... && bazelisk test //...
+        run: bazelisk build //... && bazelisk test //... && bazelisk build //:promtool
 
   # TODO(5h4d0w4rt) add cross-build https://github.com/marketplace/actions/run-on-architecture
   build-linux:
@@ -40,4 +40,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Build and test everything
-        run: bazelisk build //... && bazelisk test //...
+        run: bazelisk build //... && bazelisk test //... && bazelisk build //:promtool

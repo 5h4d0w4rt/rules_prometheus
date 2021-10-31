@@ -470,7 +470,6 @@ def prometheus_repositories(
         prometheus_version: Prometheus package version to download from source repositories if supported by reposiory
         alertmanager_version: Alertmanager package version to download from source repositories if supported by reposiory
     """
-    prometheus_dependencies()
 
     # TODO(5h4d0w4rt) add custom version support
     _prometheus_repositories_impl(prometheus_version = prometheus_version, alertmanager_version = alertmanager_version)
