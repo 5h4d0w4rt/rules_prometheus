@@ -1,5 +1,5 @@
 load(
-    "@//prometheus/internal:providers.bzl",
+    "@io_bazel_rules_prometheus//prometheus/internal:providers.bzl",
     "AlertmanagerBinaryInfo",
     "PrometheusBinaryInfo",
     "PrometheusPackageInfo",

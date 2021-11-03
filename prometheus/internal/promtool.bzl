@@ -1,6 +1,6 @@
 def _promtool_impl(ctx):
     promtool_info = (
-        ctx.toolchains["@//prometheus:toolchain"]
+        ctx.toolchains["@io_bazel_rules_prometheus//prometheus:toolchain"]
             .prometheusToolchainInfo
             .promtool
     )
@@ -26,12 +26,12 @@ _promtool = rule(
     doc = """Private rule implemented for invocation in public promtool() runner""",
     attrs = {
         "_template": attr.label(
-            default = Label("@//prometheus/internal:promtool.manual_runner.sh.tpl"),
+            default = Label("@io_bazel_rules_prometheus//prometheus/internal:promtool.manual_runner.sh.tpl"),
             allow_single_file = True,
         ),
     },
     executable = True,
-    toolchains = ["@//prometheus:toolchain"],
+    toolchains = ["@io_bazel_rules_prometheus//prometheus:toolchain"],
 )
 
 def promtool(name, **kwargs):
@@ -74,7 +74,7 @@ def _promtool_unit_test_impl(ctx):
     # To ensure the files needed by the script are available, we put them in
     # the runfiles.
     promtool_info = (
-        ctx.toolchains["@//prometheus:toolchain"]
+        ctx.toolchains["@io_bazel_rules_prometheus//prometheus:toolchain"]
             .prometheusToolchainInfo
             .promtool
     )
@@ -140,7 +140,7 @@ bazel test //examples:unit_test_rules_yml
             doc = "List of Rules-under-Test file targets",
         ),
     },
-    toolchains = ["@//prometheus:toolchain"],
+    toolchains = ["@io_bazel_rules_prometheus//prometheus:toolchain"],
 )
 
 def _promtool_config_test_impl(ctx):
@@ -150,7 +150,7 @@ def _promtool_config_test_impl(ctx):
     # the runfiles.
 
     promtool_info = (
-        ctx.toolchains["@//prometheus:toolchain"]
+        ctx.toolchains["@io_bazel_rules_prometheus//prometheus:toolchain"]
             .prometheusToolchainInfo
             .promtool
     )
@@ -206,12 +206,12 @@ bazel test //examples:test_config_yml
             doc = "List of prometheus configuration targets",
         ),
     },
-    toolchains = ["@//prometheus:toolchain"],
+    toolchains = ["@io_bazel_rules_prometheus//prometheus:toolchain"],
 )
 
 def _promtool_rules_test_impl(ctx):
     promtool_info = (
-        ctx.toolchains["@//prometheus:toolchain"]
+        ctx.toolchains["@io_bazel_rules_prometheus//prometheus:toolchain"]
             .prometheusToolchainInfo
             .promtool
     )
@@ -265,5 +265,5 @@ bazel test //examples:test_rules_yml
             doc = "List of Prometheus rules file targets",
         ),
     },
-    toolchains = ["@//prometheus:toolchain"],
+    toolchains = ["@io_bazel_rules_prometheus//prometheus:toolchain"],
 )

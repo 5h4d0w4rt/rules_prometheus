@@ -1,4 +1,4 @@
-load("@//prometheus/internal:defaults.bzl", "DEFAULT_PLATFORMS")
+load("@io_bazel_rules_prometheus//prometheus/internal:defaults.bzl", "DEFAULT_PLATFORMS")
 load("@bazel_skylib//lib:structs.bzl", "structs")
 
 INCOMPATIBLE = "@platforms//:incompatible"

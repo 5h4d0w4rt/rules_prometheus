@@ -1,5 +1,5 @@
-load("@//prometheus/internal:providers.bzl", "AlertmanagerInfo", "AmtoolInfo", "PrometheusInfo", "PromtoolInfo")
-load("@//prometheus/internal:defaults.bzl", "DEFAULT_PROMETHEUS_PACKAGE_INFO")
+load("@io_bazel_rules_prometheus//prometheus/internal:providers.bzl", "AlertmanagerInfo", "AmtoolInfo", "PrometheusInfo", "PromtoolInfo")
+load("@io_bazel_rules_prometheus//prometheus/internal:defaults.bzl", "DEFAULT_PROMETHEUS_PACKAGE_INFO")
 
 PrometheusToolchainInfo = provider(
     doc = "Prometheus Toolchain metadata, contains prometheus, alertmanager, promtool and amtool's necessary data",
@@ -63,8 +63,8 @@ def declare_toolchains(name = "declare_toolchains", _prometheus_package_info = D
             name = "prometheus_{platform}".format(platform = platform),
             prometheus = "@prometheus_{platform}//:prometheus".format(platform = platform),
             promtool = "@prometheus_{platform}//:promtool".format(platform = platform),
-            promtool_executor_template = "@//prometheus/internal:promtool.sh.tpl",
-            prometheus_executor_template = "@//prometheus/internal:prometheus.sh.tpl",
+            promtool_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:promtool.sh.tpl",
+            prometheus_executor_template = "@io_bazel_rules_prometheus//prometheus/internal:prometheus.sh.tpl",
 
             # https://docs.bazel.build/versions/main/be/common-definitions.html#common.tags
             # exclude toolchain from expanding on wildcard
@@ -77,11 +77,11 @@ def declare_toolchains(name = "declare_toolchains", _prometheus_package_info = D
             target_compatible_with = platform_info.os_constraints + platform_info.cpu_constraints,
             exec_compatible_with = platform_info.os_constraints + platform_info.cpu_constraints,
             toolchain = ":prometheus_{platform}".format(platform = platform),
-            toolchain_type = "@//prometheus:toolchain",
+            toolchain_type = "@io_bazel_rules_prometheus//prometheus:toolchain",
         )
 
 def _link_toolchain_to_prometheus_toolchain(arch):
-    return "@//prometheus/internal:prometheus_toolchain_%s" % arch
+    return "@io_bazel_rules_prometheus//prometheus/internal:prometheus_toolchain_%s" % arch
 
 def build_toolchains(architectures, toolchain_linker = _link_toolchain_to_prometheus_toolchain):
     return [

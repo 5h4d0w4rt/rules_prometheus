@@ -1,6 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@//prometheus/internal:toolchain.bzl", "declare_toolchains")
-load("@//prometheus/internal:platforms.bzl", "declare_platforms")
+load("@io_bazel_rules_prometheus//prometheus/internal:toolchain.bzl", "declare_toolchains")
+load("@io_bazel_rules_prometheus//prometheus/internal:platforms.bzl", "declare_platforms")
 
 package(
     default_visibility = [

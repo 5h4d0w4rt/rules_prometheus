@@ -1,5 +1,5 @@
-load("@//prometheus/internal:defaults.bzl", "DEFAULT_PROMETHEUS_PACKAGE_INFO")
-load("@//prometheus/internal:providers.bzl", "HttpArchiveInfo")
+load("@io_bazel_rules_prometheus//prometheus/internal:defaults.bzl", "DEFAULT_PROMETHEUS_PACKAGE_INFO")
+load("@io_bazel_rules_prometheus//prometheus/internal:providers.bzl", "HttpArchiveInfo")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")

@@ -15,19 +15,20 @@ exports_files([
 bzl_library(
     name = "api",
     srcs = [
-        "@//prometheus/internal:defaults",
-        "@//prometheus/internal:platforms",
-        "@//prometheus/internal:prom",
-        "@//prometheus/internal:promtool",
-        "@//prometheus/internal:providers",
-        "@//prometheus/internal:repositories",
-        "@//prometheus/internal:toolchain",
+        "@io_bazel_rules_prometheus//prometheus/internal:defaults",
+        "@io_bazel_rules_prometheus//prometheus/internal:platforms",
+        "@io_bazel_rules_prometheus//prometheus/internal:prom",
+        "@io_bazel_rules_prometheus//prometheus/internal:promtool",
+        "@io_bazel_rules_prometheus//prometheus/internal:providers",
+        "@io_bazel_rules_prometheus//prometheus/internal:repositories",
+        "@io_bazel_rules_prometheus//prometheus/internal:toolchain",
     ],
 )
 
 bzl_library(
     name = "defs",
     srcs = ["defs.bzl"],
+    visibility = ["//visibility:public"],
     deps = [
         ":api",
     ],
