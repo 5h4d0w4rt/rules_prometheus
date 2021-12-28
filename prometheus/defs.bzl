@@ -12,7 +12,10 @@ load(
 load(
     "@io_bazel_rules_prometheus//prometheus/internal:prom.bzl",
     _prometheus = "prometheus",
+    _prometheus_server="prometheus_server",
 )
+
+
 load(
     "@io_bazel_rules_prometheus//prometheus/internal:toolchain.bzl",
     _prometheus_toolchains = "prometheus_toolchains",
@@ -25,3 +28,4 @@ promtool_config_test = _promtool_config_test
 promtool = _promtool
 promtool_rules_test = _promtool_rules_test
 prometheus = _prometheus
+prometheus_server = _prometheus_server 
